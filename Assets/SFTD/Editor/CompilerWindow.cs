@@ -43,8 +43,13 @@ public class CompilerWindow : EditorWindow {
             if (mDialogueFilePath == null || mDialogueFilePath.Length == 0) {
                 Debug.LogError("Please select the file or directory.");
             }
-            else { 
-
+            else {
+                if (mMultiple) {
+                    // TODO:
+                }
+                else {
+                    Compiler.CompileDialogue(mDialogueFilePath);
+                }
             }
         }
     }

@@ -48,5 +48,5 @@ dialogue master {
 }
 
 interact dialogue more_meeting when (not $first) {
-    [NPC]: "Hello ${state}!"
+    [NPC]: "Hello {{$state}}!"
 }

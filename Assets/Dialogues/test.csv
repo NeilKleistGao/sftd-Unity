@@ -1,0 +1,14 @@
+keys	en_GB
+test0	Hello!
+test1	Welcome to SFTD Test!
+test2	Are you new here?
+test3	Yes
+test4	No
+test5	I'm new here.
+test6	WOW!
+test7	A new user!
+test8	Let me show you something around here!
+test9	I'm familiar with this plugin.
+test10	Great!
+test11	Have a nice day!
+test12	Hello {{$state}}!
