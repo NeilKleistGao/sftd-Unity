@@ -1,0 +1,52 @@
+#{"en_GB"}
+
+interact dialogue first_meeting when ($first) {
+    [NPC]: {
+        sound "hint"
+        delay 1
+
+        "Hello!"
+        "Welcome to SFTD Test!" in 3
+        "Are you new here?"
+        
+        select {
+            "Yes": use beginner
+            "No": use master
+        }
+    }
+
+    $first = false
+}
+
+
+dialogue beginner {
+    [you]: "I'm new here." 
+    $state = "beginner"
+
+    [NPC(happy)]: {
+        "WOW!"
+        "A new user!"
+        move @NPC (2, 0) in 0.5
+        move @NPC (0, -0.5) in 0.1
+        move @NPC (-2, 0) in 0.5
+        "Let me show you something around here!"
+    }
+
+    if ($show_anime) {
+        animate @NPC "Smile"
+    }
+}
+
+dialogue master {
+    [you]: "I'm familiar with this plugin."
+    $state = "master"
+
+    [NPC]: {
+        "Great!"
+        "Have a nice day!"
+    }
+}
+
+interact dialogue more_meeting when (not $first) {
+    [NPC]: "Hello ${state}!"
+}

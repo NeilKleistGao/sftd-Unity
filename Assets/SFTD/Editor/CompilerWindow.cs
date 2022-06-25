@@ -32,7 +32,7 @@ public class CompilerWindow : EditorWindow {
                     mDialogueFilePath = EditorUtility.OpenFolderPanel("Select Dialogue Path", "Assets", "Assets");
                 }
                 else {
-                    mDialogueFilePath = EditorUtility.OpenFilePanel("Select Dialogue Path", "Assets", "*");
+                    mDialogueFilePath = EditorUtility.OpenFilePanel("Select Dialogue Path", "Assets", "dialogue");
                 }
             }
         }
