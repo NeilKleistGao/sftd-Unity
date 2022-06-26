@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -23,6 +24,8 @@ public class VariableDatabase : MonoBehaviour {
     private Dictionary<string, int> mNameMapping = new Dictionary<string, int>();
 
     private static VariableDatabase instance;
+
+    private Dictionary<int, VariableData> mTempVariables = new Dictionary<int, VariableData>();
 
     private void Awake() {
         instance = this;
@@ -142,5 +145,17 @@ public class VariableDatabase : MonoBehaviour {
             Debug.LogWarningFormat("Variable {0} doesn't exist.", name);
             return null;
         }
+    }
+
+    public VariableData GetTempVariable(int index) {
+        if (mTempVariables.ContainsKey(index)) { 
+            return mTempVariables[index];
+        }
+
+        throw new Exception("Unknown temp variable.");
+    }
+
+    public void SetTempVariable(int index, VariableData data) {
+        mTempVariables[index] = data;
     }
 }
