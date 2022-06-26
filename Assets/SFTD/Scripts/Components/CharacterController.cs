@@ -2,17 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CharacterController : MonoBehaviour
-{
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+public class CharacterController : MonoBehaviour {
+    private string mName;
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+    public string Name { 
+        get { return mName; }
+        set { mName = value; }
     }
 }
