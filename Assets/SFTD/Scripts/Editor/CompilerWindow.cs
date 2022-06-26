@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
+using System.IO;
 
 public class CompilerWindow : EditorWindow {
     private string mDialogueFilePath = "";
@@ -11,6 +12,20 @@ public class CompilerWindow : EditorWindow {
     public static void ShowWindow() {
         EditorWindow window = EditorWindow.GetWindow<CompilerWindow>();
         window.Show();
+    }
+
+    private void CompileAll(string path) {
+        string[] files = Directory.GetFiles(path);
+        for (int i = 0; i < files.Length; i++) {
+            string file = files[i];
+            FileInfo fileInfo = new FileInfo(file);
+            if ((fileInfo.Attributes & FileAttributes.Directory) != 0) {
+                CompileAll(file);
+            }
+            else {
+                Compiler.CompileDialogue(file);
+            }
+        }
     }
 
     private void OnGUI() {
@@ -45,7 +60,7 @@ public class CompilerWindow : EditorWindow {
             }
             else {
                 if (mMultiple) {
-                    // TODO:
+                    CompileAll(mDialogueFilePath);
                 }
                 else {
                     Compiler.CompileDialogue(mDialogueFilePath);
