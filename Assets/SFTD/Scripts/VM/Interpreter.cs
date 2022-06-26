@@ -211,7 +211,7 @@ public class Interpreter : MonoBehaviour {
                     result.type = ExecutedResultType.REQUIRE_NEXT;
                     break;
                 case 1:
-                    result.type = ExecutedResultType.SUCCESS;
+                    result.type = ExecutedResultType.REQUIRE_NEXT;
                     break;
                 case 2:
                 case 3:
