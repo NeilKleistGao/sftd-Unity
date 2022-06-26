@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Text;
@@ -16,6 +17,21 @@ public struct DialogueILPack {
     public Dictionary<int, DialogueData> triggerDialogues;
     public Dictionary<int, DialogueData> interactDialogues;
     public Dictionary<int, DialogueData> defaultDialogues;
+}
+
+public enum ExecutedResultType { 
+    SUCCESS, // success, move to next one
+    FAILED, // runtime error
+    NOT_APPLIED, // not available yet
+    CALL, // call another one
+    JUMP, // jump to another one
+    REQUIRE_NEXT, // need next command now
+    END
+}
+
+public struct ExecutedResult {
+    public ExecutedResultType type;
+    public int code;
 }
 
 public class Interpreter : MonoBehaviour {
@@ -182,5 +198,90 @@ public class Interpreter : MonoBehaviour {
         }
 
         return pack;
+    }
+
+    public ExecutedResult Execute(ref byte[] pProgram, bool pYield) {
+        ExecutedResult result = new ExecutedResult();
+        int pointer = 0;
+        int op = ReadInt(ref pProgram, ref pointer);
+
+        try {
+            switch (op) {
+                case 0:
+                    result.type = ExecutedResultType.REQUIRE_NEXT;
+                    break;
+                case 1:
+                    result.type = ExecutedResultType.SUCCESS;
+                    break;
+                case 2:
+                case 3:
+                    result.type = ExecutedResultType.REQUIRE_NEXT;
+                    break;
+                case 4:
+                case 5:
+                    result.type = ExecutedResultType.SUCCESS;
+                    break;
+                case 6:
+                    result.type = ExecutedResultType.CALL;
+                    result.code = ReadInt(ref pProgram, ref pointer);
+                    break;
+                case 7:
+                    result.type = ExecutedResultType.JUMP;
+                    result.code = ReadInt(ref pProgram, ref pointer);
+                    break;
+                case 8:
+                    result.type = ExecutedResultType.REQUIRE_NEXT;
+                    break;
+                case 9:
+                    result.type = ExecutedResultType.REQUIRE_NEXT;
+                    break;
+                case 10:
+                    result.type = ExecutedResultType.REQUIRE_NEXT;
+                    break;
+                case 11:
+                    result.type = ExecutedResultType.SUCCESS;
+                    break;
+                case 12:
+                    //TODO:
+                    break;
+                case 13:
+                case 14:
+                case 15:
+                case 16:
+                case 17:
+                case 18:
+                case 19:
+                case 20:
+                case 21:
+                case 22:
+                case 23:
+                case 24:
+                case 25:
+                case 26:
+                    result.type = ExecutedResultType.REQUIRE_NEXT;
+                    break;
+                case 27:
+                    result.type = ExecutedResultType.SUCCESS;
+                    break;
+                case 28:
+                    result.type = ExecutedResultType.REQUIRE_NEXT;
+                    break;
+                case 29:
+                    result.type = ExecutedResultType.REQUIRE_NEXT;
+                    break;
+                case 255:
+                    result.type = ExecutedResultType.END;
+                    break;
+                default:
+                    result.type = ExecutedResultType.FAILED;
+                    break;
+            }
+        }
+        catch (Exception e) {
+            Debug.LogError(e.Message);
+            result.type = ExecutedResultType.FAILED;
+        }
+
+        return result;
     }
 }

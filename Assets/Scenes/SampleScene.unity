@@ -252,6 +252,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   script: {fileID: 4900000, guid: 207ce7c5e005bf245a949fd2562b8e8e, type: 3}
+  interactKey: Submit
 --- !u!1001 &3371195053398675887
 PrefabInstance:
   m_ObjectHideFlags: 0
