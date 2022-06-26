@@ -13,17 +13,8 @@ public class Compiler {
         Debug.LogFormat("Compiling dialogue file {0}...", pFilename);
 
         string prefix = pFilename.Substring(0, pFilename.LastIndexOf('.'));
-        string outputName = prefix + ".dd";
+        string outputName = prefix + ".dd.txt";
         byte[] err = new byte[2048];
-
-        var byteFilename = Encoding.Default.GetBytes(pFilename);
-        var byteOutputName = Encoding.Default.GetBytes(outputName);
-        var bytePrefix = Encoding.Default.GetBytes(prefix);
-
-        Debug.LogFormat("filename: {0}", Encoding.Default.GetString(byteFilename));
-        Debug.LogFormat("output: {0}", Encoding.Default.GetString(byteOutputName));
-        Debug.LogFormat("prefix: {0}", Encoding.Default.GetString(bytePrefix));
-
         bool res = Compile(Encoding.Default.GetBytes(pFilename + '\0'), Encoding.Default.GetBytes(outputName + '\0'), Encoding.Default.GetBytes(prefix + '\0'), err);
 
         if (res) {
