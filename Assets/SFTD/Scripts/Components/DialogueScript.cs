@@ -7,7 +7,12 @@ public class DialogueScript : MonoBehaviour {
     [SerializeField] private TextAsset script;
     [SerializeField] private string interactKey = "Submit";
 
-    private Stack<int> mStack = new Stack<int>();
+    private struct StackValue {
+        public int pointer;
+        public DialogueData data;
+    }
+
+    private Stack<StackValue> mStack = new Stack<StackValue>();
 
     private DialogueILPack mIL;
     private DialogueData mCurrentDialogue;
@@ -69,6 +74,7 @@ public class DialogueScript : MonoBehaviour {
             } while (!end);
 
             if (found) {
+                mCurrentDialogue = dialogue;
                 this.mAuto = mAuto;
                 StartCoroutine("Process");
                 break;
@@ -98,7 +104,59 @@ public class DialogueScript : MonoBehaviour {
         mTriggered = false;
     }
 
-    private void Process() { 
+    private IEnumerator Process() {
+        var interpreter = Interpreter.Instance;
+        bool end = false;
 
+        do {
+            var res = interpreter.Execute(ref mCurrentDialogue.commands[mPointer], !mAuto);
+
+            switch (res.type) {
+                case ExecutedResultType.SUCCESS:
+                    ++mPointer; end = true;
+                    break;
+                case ExecutedResultType.CALL: {
+                        StackValue stackValue = new StackValue();
+                        stackValue.pointer = mPointer + 1;
+                        stackValue.data = mCurrentDialogue;
+                        mStack.Push(stackValue);
+                        mPointer = 0;
+                        mCurrentDialogue = mIL.defaultDialogues[res.code];
+                        break;
+                    }
+                case ExecutedResultType.FAILED:
+                    mPointer = -1;
+                    Debug.LogError("Runtime Error!");
+                    end = true;
+                    break;
+                case ExecutedResultType.NOT_APPLIED:
+                    end = true;
+                    break;
+                case ExecutedResultType.JUMP:
+                    mPointer += res.code;
+                    break;
+                case ExecutedResultType.REQUIRE_NEXT:
+                    ++mPointer;
+                    break;
+                case ExecutedResultType.END: {
+                        if (mStack.Count > 0) {
+                            var top = mStack.Pop();
+                            mPointer = top.pointer;
+                            mCurrentDialogue = top.data;
+                        }
+                        else {
+                            mPointer = -1;
+                            end = true;
+                        }
+
+                        break;
+                    }
+                    
+            }
+        } while (!end);
+
+        if (mPointer > -1) {
+            yield return null;
+        }
     }
 }
