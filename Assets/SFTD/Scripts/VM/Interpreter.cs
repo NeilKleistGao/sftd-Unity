@@ -19,12 +19,17 @@ public struct DialogueILPack {
 }
 
 public class Interpreter : MonoBehaviour {
+    private VariableDatabase mVariableDatabase;
+    private CharacterDatabase mCharacterDatabase;
+
     private static Interpreter sInstance;
 
     private Dictionary<int, int> mCommandSize = new Dictionary<int, int>();
 
     private void Awake() {
         sInstance = this;
+        mVariableDatabase = GetComponent<VariableDatabase>();
+        mCharacterDatabase = GetComponent<CharacterDatabase>();
 
         mCommandSize.Add(0, 1);
         mCommandSize.Add(1, 1);

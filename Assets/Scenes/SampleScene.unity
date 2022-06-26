@@ -251,7 +251,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b654ee9fa1a407b48a031deb2d4ba183, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mScript: {fileID: 4900000, guid: 207ce7c5e005bf245a949fd2562b8e8e, type: 3}
+  script: {fileID: 4900000, guid: 207ce7c5e005bf245a949fd2562b8e8e, type: 3}
 --- !u!1001 &3371195053398675887
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -265,15 +265,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3371195054106562218, guid: 8342d21e6ad05ad4191895aeebed8588, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.6186935
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3371195054106562218, guid: 8342d21e6ad05ad4191895aeebed8588, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.26919645
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3371195054106562218, guid: 8342d21e6ad05ad4191895aeebed8588, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0.0052539166
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3371195054106562218, guid: 8342d21e6ad05ad4191895aeebed8588, type: 3}
       propertyPath: m_LocalRotation.w
@@ -306,6 +306,46 @@ PrefabInstance:
     - target: {fileID: 3371195054106562219, guid: 8342d21e6ad05ad4191895aeebed8588, type: 3}
       propertyPath: m_Name
       value: Interpreter
+      objectReference: {fileID: 0}
+    - target: {fileID: 5896796535553027119, guid: 8342d21e6ad05ad4191895aeebed8588, type: 3}
+      propertyPath: variables.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 5896796535553027119, guid: 8342d21e6ad05ad4191895aeebed8588, type: 3}
+      propertyPath: variables.Array.data[0].b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5896796535553027119, guid: 8342d21e6ad05ad4191895aeebed8588, type: 3}
+      propertyPath: variables.Array.data[1].s
+      value: unknown
+      objectReference: {fileID: 0}
+    - target: {fileID: 5896796535553027119, guid: 8342d21e6ad05ad4191895aeebed8588, type: 3}
+      propertyPath: variables.Array.data[2].b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5896796535553027119, guid: 8342d21e6ad05ad4191895aeebed8588, type: 3}
+      propertyPath: variables.Array.data[0].name
+      value: first
+      objectReference: {fileID: 0}
+    - target: {fileID: 5896796535553027119, guid: 8342d21e6ad05ad4191895aeebed8588, type: 3}
+      propertyPath: variables.Array.data[0].type
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 5896796535553027119, guid: 8342d21e6ad05ad4191895aeebed8588, type: 3}
+      propertyPath: variables.Array.data[1].name
+      value: state
+      objectReference: {fileID: 0}
+    - target: {fileID: 5896796535553027119, guid: 8342d21e6ad05ad4191895aeebed8588, type: 3}
+      propertyPath: variables.Array.data[1].type
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5896796535553027119, guid: 8342d21e6ad05ad4191895aeebed8588, type: 3}
+      propertyPath: variables.Array.data[2].name
+      value: show_anime
+      objectReference: {fileID: 0}
+    - target: {fileID: 5896796535553027119, guid: 8342d21e6ad05ad4191895aeebed8588, type: 3}
+      propertyPath: variables.Array.data[2].type
+      value: 4
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8342d21e6ad05ad4191895aeebed8588, type: 3}

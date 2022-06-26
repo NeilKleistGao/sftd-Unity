@@ -4,7 +4,7 @@ using UnityEngine;
 using System.Text;
 
 public class DialogueScript : MonoBehaviour {
-    [SerializeField] private TextAsset mScript;
+    [SerializeField] private TextAsset script;
 
     private DialogueILPack mIL;
 
@@ -15,6 +15,10 @@ public class DialogueScript : MonoBehaviour {
             return;
         }
 
-        mIL = interpreter.LoadScript(mScript.bytes);
+        if (script == null) {
+            Debug.LogError("No dialogue script has been assigned.");
+        }
+
+        mIL = interpreter.LoadScript(script.bytes);
     }
 }
