@@ -237,7 +237,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &884523561
 MonoBehaviour:
@@ -320,7 +320,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1001 &690482004057049347
+--- !u!1001 &1894149584
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -333,15 +333,15 @@ PrefabInstance:
       objectReference: {fileID: 519420031}
     - target: {fileID: 690482004195494002, guid: 5f6be9a026bdf6a4987dda3bac496c73, type: 3}
       propertyPath: m_RootOrder
-      value: 3
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 690482004195494002, guid: 5f6be9a026bdf6a4987dda3bac496c73, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: -3.3281484
       objectReference: {fileID: 0}
     - target: {fileID: 690482004195494002, guid: 5f6be9a026bdf6a4987dda3bac496c73, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: -1.4893949
       objectReference: {fileID: 0}
     - target: {fileID: 690482004195494002, guid: 5f6be9a026bdf6a4987dda3bac496c73, type: 3}
       propertyPath: m_LocalPosition.z
