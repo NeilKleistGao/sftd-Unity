@@ -9,7 +9,14 @@ public class CharacterDatabase : MonoBehaviour {
     private Dictionary<string, int> mCharacterIndex = new Dictionary<string, int>();
     private Dictionary<string, int> mControllerIndex = new Dictionary<string, int>();
 
+    private static CharacterDatabase instance = null;
+
+    public static CharacterDatabase Instance { 
+        get { return instance; }
+    }
+
     private void Awake() {
+        instance = this;
         if (characters != null) {
             for (int i = 0; i < characters.Length; ++i) {
                 mCharacterIndex.Add(characters[i].name, i);
