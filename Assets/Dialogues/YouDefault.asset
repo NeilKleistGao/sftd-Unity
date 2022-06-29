@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: YouDefault
   m_EditorClassIdentifier: 
   name: 
-  avatar: {fileID: 0}
+  avatar: {fileID: 934650782, guid: 3651a0f1e131180439cd57cba7504f2d, type: 3}
   font: {fileID: 0}
   sound: {fileID: 0}

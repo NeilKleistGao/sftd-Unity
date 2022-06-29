@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ebb57ce37a8e1c14793af6535f97035f, type: 3}
   m_Name: NPCDefault
   m_EditorClassIdentifier: 
-  avatar: {fileID: 0}
+  name: 
+  avatar: {fileID: 586882613, guid: e9e25044e457ec34bb6ca1744c2d6b62, type: 3}
   font: {fileID: 0}
   sound: {fileID: 0}

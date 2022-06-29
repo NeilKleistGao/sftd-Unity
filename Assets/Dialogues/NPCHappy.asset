@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: NPCHappy
   m_EditorClassIdentifier: 
   name: happy
-  avatar: {fileID: 0}
+  avatar: {fileID: 1628348411, guid: 24b1a8706298c7e4f8c6dff95443dfa6, type: 3}
   font: {fileID: 0}
   sound: {fileID: 0}
