@@ -1,10 +1,16 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
+
+
+[System.Serializable]
+public class LanguageCodeChangedEvnet : UnityEvent { }
 
 public class StringDatabase : MonoBehaviour {
     private static StringDatabase sInstance = null;
     [SerializeField] private string languageCode = "en_GB";
+    private LanguageCodeChangedEvnet mChangedEvent = new LanguageCodeChangedEvnet();
 
     private Dictionary<string, string> mTranslation = new Dictionary<string, string>();
 
@@ -18,7 +24,12 @@ public class StringDatabase : MonoBehaviour {
 
     public string LanguageCode { 
         get { return languageCode; }
-        set { languageCode = value; }
+        set { languageCode = value; mChangedEvent.Invoke(); }
+    }
+
+    public LanguageCodeChangedEvnet OnLanguageCodeChanged { 
+        get { return mChangedEvent; }
+        set { mChangedEvent = value; }
     }
 
     public void LoadI18NFile (TextAsset pAsset) {
@@ -30,7 +41,10 @@ public class StringDatabase : MonoBehaviour {
             return mTranslation[pName];
         }
 
-        Debug.LogErrorFormat("String \"{0}\" not Found", pName);
-        return "";
+        return pName;
+    }
+
+    public void Clear() { 
+        mTranslation.Clear();
     }
 }

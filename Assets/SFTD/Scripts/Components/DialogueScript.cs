@@ -5,6 +5,7 @@ using System.Text;
 
 public class DialogueScript : MonoBehaviour {
     [SerializeField] private TextAsset script;
+    [SerializeField] private TextAsset i18n;
     [SerializeField] private string interactKey = "Submit";
 
     private struct StackValue {
@@ -32,6 +33,21 @@ public class DialogueScript : MonoBehaviour {
         }
 
         mIL = interpreter.LoadScript(script.bytes);
+
+        var stringDatabase = StringDatabase.Instance;
+        if (stringDatabase == null) {
+            Debug.LogError("No string database has been set in the scene.");
+            return;
+        }
+
+        if (i18n != null) {
+            stringDatabase.LoadI18NFile(i18n);
+            stringDatabase.OnLanguageCodeChanged.AddListener(OnLanguageCodeChanged);
+        }
+    }
+
+    private void OnLanguageCodeChanged() {
+        StringDatabase.Instance.LoadI18NFile(i18n);
     }
 
     private bool TryToStart(ref Dictionary<int, DialogueData> pList) {
