@@ -38,6 +38,7 @@ public class Interpreter : MonoBehaviour {
     private static Interpreter sInstance;
 
     private Dictionary<int, int> mCommandSize = new Dictionary<int, int>();
+    private Dictionary<int, bool> mBuzy = new Dictionary<int, bool>();
 
     private void Awake() {
         sInstance = this;
@@ -195,7 +196,7 @@ public class Interpreter : MonoBehaviour {
         return pack;
     }
 
-    public ExecutedResult Execute(ref byte[] pProgram, bool pYield) {
+    public ExecutedResult Execute(ref byte[] pProgram) {
         ExecutedResult result = new ExecutedResult();
         int pointer = 0;
         int op = ReadInt(ref pProgram, ref pointer);
@@ -281,7 +282,6 @@ public class Interpreter : MonoBehaviour {
     }
 
     private void OnSelecting(int pIndex) {
-        Debug.Log(pIndex);
     }
 
     private void Start() {

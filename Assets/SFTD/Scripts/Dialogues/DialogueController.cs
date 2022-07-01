@@ -7,6 +7,7 @@ using UnityEngine.Events;
 
 [System.Serializable]
 public class SelectEvent : UnityEvent<int> { }
+public class DialogueEvent : UnityEvent { }
 
 public class DialogueController : MonoBehaviour {
     [SerializeField] private float defaultSpeed = 1.0f;
@@ -25,6 +26,8 @@ public class DialogueController : MonoBehaviour {
     [SerializeField] private string submitKey;
 
     private SelectEvent mSelectEvent = new SelectEvent();
+    private DialogueEvent mBeginEvnet = new DialogueEvent();
+    private DialogueEvent mEndEvent = new DialogueEvent();
 
     private float mSpeed = 1.0f;
     private Coroutine mTextCoroutine = null;
@@ -37,6 +40,16 @@ public class DialogueController : MonoBehaviour {
     public SelectEvent OnSelecting {
         get { return mSelectEvent; }
         set { mSelectEvent = value; }
+    }
+
+    public DialogueEvent OnDialogueBegin { 
+        get { return mBeginEvnet; }
+        set { mBeginEvnet = value; }
+    }
+
+    public DialogueEvent OnDialogueEnd { 
+        get { return mEndEvent; }
+        set { mEndEvent = value; }
     }
 
     private void Assert<T>(T pObj, string pName) {

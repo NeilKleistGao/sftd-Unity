@@ -17,7 +17,6 @@ public class DialogueScript : MonoBehaviour {
     private DialogueILPack mIL;
     private DialogueData mCurrentDialogue;
     private int mPointer = -1;
-    private bool mAuto = false;
     private bool mTriggered = false;
     private bool mInteracting = false;
 
@@ -35,7 +34,7 @@ public class DialogueScript : MonoBehaviour {
         mIL = interpreter.LoadScript(script.bytes);
     }
 
-    private bool TryToStart(ref Dictionary<int, DialogueData> pList, bool mAuto = false) {
+    private bool TryToStart(ref Dictionary<int, DialogueData> pList) {
         var interpreter = Interpreter.Instance;
         bool found = false;
         foreach (var it in pList) {
@@ -44,7 +43,7 @@ public class DialogueScript : MonoBehaviour {
             mPointer = 0;
 
             do {
-                var res = interpreter.Execute(ref dialogue.commands[mPointer], !mAuto);
+                var res = interpreter.Execute(ref dialogue.commands[mPointer]);
 
                 switch (res.type) {
                     case ExecutedResultType.SUCCESS:
@@ -75,7 +74,7 @@ public class DialogueScript : MonoBehaviour {
 
             if (found) {
                 mCurrentDialogue = dialogue;
-                this.mAuto = mAuto;
+                DialogueController.Instance.StartDialogue();
                 StartCoroutine("Process");
                 break;
             }
@@ -93,7 +92,7 @@ public class DialogueScript : MonoBehaviour {
 
         bool _ = (mInteracting && TryToStart(ref mIL.interactDialogues)) ||
             (mTriggered && TryToStart(ref mIL.triggerDialogues)) ||
-            TryToStart(ref mIL.autoDialogues, true);
+            TryToStart(ref mIL.autoDialogues);
     }
 
     private void OnTriggerEnter2D(Collider2D collision) {
@@ -109,7 +108,7 @@ public class DialogueScript : MonoBehaviour {
         bool end = false;
 
         do {
-            var res = interpreter.Execute(ref mCurrentDialogue.commands[mPointer], !mAuto);
+            var res = interpreter.Execute(ref mCurrentDialogue.commands[mPointer]);
 
             switch (res.type) {
                 case ExecutedResultType.SUCCESS:
