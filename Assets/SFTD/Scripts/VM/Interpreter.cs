@@ -203,6 +203,38 @@ public class Interpreter : MonoBehaviour {
         return pack;
     }
 
+    private void ExecuteSpeak(int op, ref byte[] pProgram, ref int pPointer, ref string[] pStrings, ref string[] pSymbols) {
+        int id = ReadInt(ref pProgram, ref pPointer);
+        string str = StringDatabase.Instance.GetString(pStrings[id]);
+        if (op == 4) {
+            DialogueController.Instance.ShowText(str);
+        }
+        else {
+            int type = ReadInt(ref pProgram, ref pPointer);
+            float time = -1.0f;
+            if (type == 0) {
+                int pos = ReadInt(ref pProgram, ref pPointer);
+                if (pos < 0) {
+                    time = VariableDatabase.Instance.GetFloat(pos);
+                }
+                else {
+                    time = VariableDatabase.Instance.GetFloat(pSymbols[pos]);
+                }
+            }
+            else if (type == 2) {
+                time = ReadInt(ref pProgram, ref pPointer);
+            }
+            else if (type == 3) {
+                time = ReadFloat(ref pProgram, ref pPointer);
+            }
+            else {
+                Debug.LogError("Runtime Error.");
+            }
+
+            DialogueController.Instance.ShowText(str, time);
+        }
+    }
+
     public ExecutedResult Execute(int pID, ref byte[] pProgram, ref string[] pStrings, ref string[] pSymbols) {
         ExecutedResult result = new ExecutedResult();
         int pointer = 0;
@@ -232,34 +264,7 @@ public class Interpreter : MonoBehaviour {
                     }
                 case 4:
                 case 5: {
-                        int id = ReadInt(ref pProgram, ref pointer);
-                        string str = StringDatabase.Instance.GetString(pStrings[id]);
-                        if (op == 4) {
-                            DialogueController.Instance.ShowText(str);
-                        }
-                        else {
-                            int type = ReadInt(ref pProgram, ref pointer);
-                            float time = -1.0f;
-                            if (type == 0) {
-                                int pos = ReadInt(ref pProgram, ref pointer);
-                                if (pos < 0) {
-                                    time = VariableDatabase.Instance.GetFloat(pos);
-                                }
-                                else {
-                                    time = VariableDatabase.Instance.GetFloat(pSymbols[pos]);
-                                }
-                            }
-                            else if (type == 2) {
-                                time = ReadInt(ref pProgram, ref pointer);
-                            }
-                            else if (type == 3) {
-                                time = ReadFloat(ref pProgram, ref pointer);
-                            }
-                            else {
-                                Debug.LogError("Runtime Error.");
-                            }
-                        }
-
+                        ExecuteSpeak(op, ref pProgram, ref pointer, ref pStrings, ref pSymbols);
                         result.type = ExecutedResultType.SUCCESS;
                         break;
                     }
