@@ -12,7 +12,8 @@ public class DialogueController : MonoBehaviour {
     [SerializeField] private TMP_Text nameText;
     [SerializeField] private TMP_Text mainContentText;
     [SerializeField] private TMP_FontAsset defaultFont;
-    // TODO: music
+    [SerializeField] private AudioSource effectPlayer;
+    [SerializeField] private AudioClip defaultEffect;
 
     private static DialogueController instance;
 
@@ -25,6 +26,11 @@ public class DialogueController : MonoBehaviour {
     private void Awake() {
         instance = this;
         Assert(dialogueCanvas, "Dialogue Canvas");
+        Assert(avatarImage, "Avatar Image");
+        Assert(nameText, "Name Text");
+        Assert(mainContentText, "Main Content Text");
+        Assert(defaultFont, "Default Font");
+        Assert(effectPlayer, "Effect Player");
     }
 
     public static DialogueController Instance { 
@@ -64,6 +70,7 @@ public class DialogueController : MonoBehaviour {
             if (info != null) {
                 avatarImage.sprite = info.avatar;
                 nameText.text = name;
+
                 if (info.font == null) {
                     mainContentText.font = defaultFont;
                 }
@@ -71,7 +78,12 @@ public class DialogueController : MonoBehaviour {
                     mainContentText.font = info.font;
                 }
 
-                // TODO: music
+                if (info.sound == null) {
+                    effectPlayer.clip = defaultEffect;
+                }
+                else {
+                    effectPlayer.clip = info.sound;
+                }
             }
         }
     }
