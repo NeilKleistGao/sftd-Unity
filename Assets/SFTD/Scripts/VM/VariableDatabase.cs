@@ -105,6 +105,9 @@ public class VariableDatabase : MonoBehaviour {
     public float GetFloat(string pName) {
         if (mNameMapping.ContainsKey(pName)) {
             int i = mNameMapping[pName];
+            if (variables[i].type != VariableType.INT) {
+                return variables[i].i;
+            }
             if (variables[i].type != VariableType.FLOAT) {
                 Debug.LogWarningFormat("Variable {0} is not float.", pName);
             }
@@ -184,5 +187,63 @@ public class VariableDatabase : MonoBehaviour {
 
     public void SetTempVariable(int index, VariableData data) {
         mTempVariables[index] = data;
+    }
+    public int GetInt(int pIndex) {
+        if (mTempVariables.ContainsKey(pIndex)) {
+            if (mTempVariables[pIndex].type != VariableType.INT) {
+                Debug.LogWarningFormat("Variable {0} is not int.", pIndex);
+            }
+
+            return mTempVariables[pIndex].i;
+        }
+        else {
+            Debug.LogWarningFormat("Variable {0} doesn't exist.", pIndex);
+            return 0;
+        }
+    }
+
+    public float GetFloat(int pIndex) {
+        if (mTempVariables.ContainsKey(pIndex)) {
+            if (mTempVariables[pIndex].type != VariableType.INT) {
+                return mTempVariables[pIndex].i;
+            }
+            if (mTempVariables[pIndex].type != VariableType.FLOAT) {
+                Debug.LogWarningFormat("Variable {0} is not float.", pIndex);
+            }
+
+            return mTempVariables[pIndex].f;
+        }
+        else {
+            Debug.LogWarningFormat("Variable {0} doesn't exist.", pIndex);
+            return 0.0f;
+        }
+    }
+
+    public bool GetBool(int pIndex) {
+        if (mTempVariables.ContainsKey(pIndex)) {
+            if (mTempVariables[pIndex].type != VariableType.BOOL) {
+                Debug.LogWarningFormat("Variable {0} is not bool.", pIndex);
+            }
+
+            return mTempVariables[pIndex].b;
+        }
+        else {
+            Debug.LogWarningFormat("Variable {0} doesn't exist.", pIndex);
+            return false;
+        }
+    }
+
+    public string GetString(int pIndex) {
+        if (mTempVariables.ContainsKey(pIndex)) {
+            if (mTempVariables[pIndex].type != VariableType.STRING) {
+                Debug.LogWarningFormat("Variable {0} is not string.", pIndex);
+            }
+
+            return mTempVariables[pIndex].s;
+        }
+        else {
+            Debug.LogWarningFormat("Variable {0} doesn't exist.", pIndex);
+            return null;
+        }
     }
 }

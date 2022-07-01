@@ -100,6 +100,13 @@ public class Interpreter : MonoBehaviour {
         return Encoding.ASCII.GetString(buffer);
     }
 
+    private float ReadFloat(ref byte[] pContent, ref int pPointer) {
+        byte[] buffer = new byte[4] { pContent[pPointer], pContent[pPointer + 1],
+                                        pContent[pPointer + 2], pContent[pPointer + 3]};
+        pPointer += 4;
+        return BitConverter.ToSingle(buffer);
+    }
+
     private DialogueData ParseDialogue(ref byte[] pContent, ref int pPointer) {
         DialogueData data = new DialogueData();
         int count = ReadInt(ref pContent, ref pPointer);
@@ -224,9 +231,38 @@ public class Interpreter : MonoBehaviour {
                         break;
                     }
                 case 4:
-                case 5:
-                    result.type = ExecutedResultType.SUCCESS;
-                    break;
+                case 5: {
+                        int id = ReadInt(ref pProgram, ref pointer);
+                        string str = StringDatabase.Instance.GetString(pStrings[id]);
+                        if (op == 4) {
+                            DialogueController.Instance.ShowText(str);
+                        }
+                        else {
+                            int type = ReadInt(ref pProgram, ref pointer);
+                            float time = -1.0f;
+                            if (type == 0) {
+                                int pos = ReadInt(ref pProgram, ref pointer);
+                                if (pos < 0) {
+                                    time = VariableDatabase.Instance.GetFloat(pos);
+                                }
+                                else {
+                                    time = VariableDatabase.Instance.GetFloat(pSymbols[pos]);
+                                }
+                            }
+                            else if (type == 2) {
+                                time = ReadInt(ref pProgram, ref pointer);
+                            }
+                            else if (type == 3) {
+                                time = ReadFloat(ref pProgram, ref pointer);
+                            }
+                            else {
+                                Debug.LogError("Runtime Error.");
+                            }
+                        }
+
+                        result.type = ExecutedResultType.SUCCESS;
+                        break;
+                    }
                 case 6:
                     result.type = ExecutedResultType.CALL;
                     result.code = ReadInt(ref pProgram, ref pointer);
