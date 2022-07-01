@@ -43,7 +43,7 @@ public class DialogueScript : MonoBehaviour {
             mPointer = 0;
 
             do {
-                var res = interpreter.Execute(ref dialogue.commands[mPointer]);
+                var res = interpreter.Execute(GetHashCode(), ref dialogue.commands[mPointer], ref mIL.strings, ref mIL.symbols);
 
                 switch (res.type) {
                     case ExecutedResultType.SUCCESS:
@@ -108,7 +108,7 @@ public class DialogueScript : MonoBehaviour {
         bool end = false;
 
         do {
-            var res = interpreter.Execute(ref mCurrentDialogue.commands[mPointer]);
+            var res = interpreter.Execute(GetHashCode(), ref mCurrentDialogue.commands[mPointer], ref mIL.strings, ref mIL.symbols);
 
             switch (res.type) {
                 case ExecutedResultType.SUCCESS:
@@ -157,5 +157,9 @@ public class DialogueScript : MonoBehaviour {
         if (mPointer > -1) {
             yield return null;
         }
+    }
+
+    public override int GetHashCode() {
+        return script.GetHashCode();
     }
 }

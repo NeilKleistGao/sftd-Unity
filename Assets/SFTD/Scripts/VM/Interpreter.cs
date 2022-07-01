@@ -196,7 +196,7 @@ public class Interpreter : MonoBehaviour {
         return pack;
     }
 
-    public ExecutedResult Execute(ref byte[] pProgram) {
+    public ExecutedResult Execute(int pID, ref byte[] pProgram, ref string[] pStrings, ref string[] pSymbols) {
         ExecutedResult result = new ExecutedResult();
         int pointer = 0;
         int op = ReadInt(ref pProgram, ref pointer);
@@ -210,9 +210,19 @@ public class Interpreter : MonoBehaviour {
                     result.type = ExecutedResultType.REQUIRE_NEXT;
                     break;
                 case 2:
-                case 3:
-                    result.type = ExecutedResultType.REQUIRE_NEXT;
-                    break;
+                case 3: {
+                        string name = ReadString(ref pProgram, ref pointer);
+                        if (op == 2) {
+                            DialogueController.Instance.SetAvatar(name);
+                        }
+                        else {
+                            string state = ReadString(ref pProgram, ref pointer);
+                            DialogueController.Instance.SetAvatar(name, state);
+                        }
+                        
+                        result.type = ExecutedResultType.REQUIRE_NEXT;
+                        break;
+                    }
                 case 4:
                 case 5:
                     result.type = ExecutedResultType.SUCCESS;
@@ -266,6 +276,7 @@ public class Interpreter : MonoBehaviour {
                     result.type = ExecutedResultType.REQUIRE_NEXT;
                     break;
                 case 255:
+                    DialogueController.Instance.EndDialogue();
                     result.type = ExecutedResultType.END;
                     break;
                 default:
