@@ -43,8 +43,6 @@ public class DialogueController : MonoBehaviour {
     private void Start() {
         // for test only
         StartDialogue();
-        ShowText("Now state is: {{$state}}", 2);
-        Skip();
     }
 
     public void StartDialogue() {
@@ -121,6 +119,10 @@ public class DialogueController : MonoBehaviour {
 
     private IEnumerator TypeCharacter() {
         while (mainContentText.maxVisibleCharacters < mainContentText.text.Length) {
+            if (effectPlayer.clip != null) {
+                effectPlayer.Play();
+            }
+            
             ++mainContentText.maxVisibleCharacters;
             yield return new WaitForSeconds(1.0f / mSpeed);
         }
