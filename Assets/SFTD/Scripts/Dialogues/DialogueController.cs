@@ -203,4 +203,15 @@ public class DialogueController : MonoBehaviour {
 
         mOptions = null;
     }
+
+    public void PlaySoundEffect(string pName) {
+        var clip = SoundEffectDatabase.Instance.GetAudioClip(pName);
+        if (clip != null) {
+            effectPlayer.PlayOneShot(clip);
+        }
+    }
+
+    public bool IsSoundEffectEnd() {
+        return !effectPlayer.isPlaying;
+    }
 }
