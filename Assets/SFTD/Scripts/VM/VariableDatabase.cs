@@ -43,106 +43,133 @@ public class VariableDatabase : MonoBehaviour {
         get { return instance; }
     }
 
-    public void Set(string name, int value) {
-        if (mNameMapping.ContainsKey(name)) {
-            int i = mNameMapping[name];
+    public void Set(string pName, int value) {
+        if (mNameMapping.ContainsKey(pName)) {
+            int i = mNameMapping[pName];
             variables[i].type = VariableType.INT;
             variables[i].i = value;
         }
         else {
-            Debug.LogWarningFormat("Variable {0} doesn't exist.", name);
+            Debug.LogWarningFormat("Variable {0} doesn't exist.", pName);
         }
     }
 
-    public void Set(string name, float value) {
-        if (mNameMapping.ContainsKey(name)) {
-            int i = mNameMapping[name];
+    public void Set(string pName, float value) {
+        if (mNameMapping.ContainsKey(pName)) {
+            int i = mNameMapping[pName];
             variables[i].type = VariableType.FLOAT;
             variables[i].f = value;
         }
         else {
-            Debug.LogWarningFormat("Variable {0} doesn't exist.", name);
+            Debug.LogWarningFormat("Variable {0} doesn't exist.", pName);
         }
     }
 
-    public void Set(string name, bool value) {
-        if (mNameMapping.ContainsKey(name)) {
-            int i = mNameMapping[name];
+    public void Set(string pName, bool value) {
+        if (mNameMapping.ContainsKey(pName)) {
+            int i = mNameMapping[pName];
             variables[i].type = VariableType.BOOL;
             variables[i].b = value;
         }
         else {
-            Debug.LogWarningFormat("Variable {0} doesn't exist.", name);
+            Debug.LogWarningFormat("Variable {0} doesn't exist.", pName);
         }
     }
 
-    public void Set(string name, string value) {
-        if (mNameMapping.ContainsKey(name)) {
-            int i = mNameMapping[name];
+    public void Set(string pName, string value) {
+        if (mNameMapping.ContainsKey(pName)) {
+            int i = mNameMapping[pName];
             variables[i].type = VariableType.STRING;
             variables[i].s = value;
         }
         else {
-            Debug.LogWarningFormat("Variable {0} doesn't exist.", name);
+            Debug.LogWarningFormat("Variable {0} doesn't exist.", pName);
         }
     }
 
-    public int GetInt(string name) {
-        if (mNameMapping.ContainsKey(name)) {
-            int i = mNameMapping[name];
+    public int GetInt(string pName) {
+        if (mNameMapping.ContainsKey(pName)) {
+            int i = mNameMapping[pName];
             if (variables[i].type != VariableType.INT) {
-                Debug.LogWarningFormat("Variable {0} is not int.", name);
+                Debug.LogWarningFormat("Variable {0} is not int.", pName);
             }
 
             return variables[i].i;
         }
         else {
-            Debug.LogWarningFormat("Variable {0} doesn't exist.", name);
+            Debug.LogWarningFormat("Variable {0} doesn't exist.", pName);
             return 0;
         }
     }
 
-    public float GetFloat(string name) {
-        if (mNameMapping.ContainsKey(name)) {
-            int i = mNameMapping[name];
+    public float GetFloat(string pName) {
+        if (mNameMapping.ContainsKey(pName)) {
+            int i = mNameMapping[pName];
             if (variables[i].type != VariableType.FLOAT) {
-                Debug.LogWarningFormat("Variable {0} is not float.", name);
+                Debug.LogWarningFormat("Variable {0} is not float.", pName);
             }
 
             return variables[i].f;
         }
         else {
-            Debug.LogWarningFormat("Variable {0} doesn't exist.", name);
+            Debug.LogWarningFormat("Variable {0} doesn't exist.", pName);
             return 0.0f;
         }
     }
 
-    public bool GetBool(string name) {
-        if (mNameMapping.ContainsKey(name)) {
-            int i = mNameMapping[name];
+    public bool GetBool(string pName) {
+        if (mNameMapping.ContainsKey(pName)) {
+            int i = mNameMapping[pName];
             if (variables[i].type != VariableType.BOOL) {
-                Debug.LogWarningFormat("Variable {0} is not bool.", name);
+                Debug.LogWarningFormat("Variable {0} is not bool.", pName);
             }
 
             return variables[i].b;
         }
         else {
-            Debug.LogWarningFormat("Variable {0} doesn't exist.", name);
+            Debug.LogWarningFormat("Variable {0} doesn't exist.", pName);
             return false;
         }
     }
 
-    public string GetString(string name) {
-        if (mNameMapping.ContainsKey(name)) {
-            int i = mNameMapping[name];
+    public string GetString(string pName) {
+        if (mNameMapping.ContainsKey(pName)) {
+            int i = mNameMapping[pName];
             if (variables[i].type != VariableType.STRING) {
-                Debug.LogWarningFormat("Variable {0} is not string.", name);
+                Debug.LogWarningFormat("Variable {0} is not string.", pName);
             }
 
             return variables[i].s;
         }
         else {
-            Debug.LogWarningFormat("Variable {0} doesn't exist.", name);
+            Debug.LogWarningFormat("Variable {0} doesn't exist.", pName);
+            return null;
+        }
+    }
+
+    public string GetAny(string pName) {
+        if (mNameMapping.ContainsKey(pName)) {
+            int i = mNameMapping[pName];
+            string res = null;
+            switch (variables[i].type) {
+                case VariableType.BOOL:
+                    res = variables[i].b.ToString();
+                    break;
+                case VariableType.STRING:
+                    res = variables[i].s;
+                    break;
+                case VariableType.INT:
+                    res = variables[i].i.ToString();
+                    break;
+                case VariableType.FLOAT:
+                    res = variables[i].f.ToString();
+                    break;
+            }
+
+            return res;
+        }
+        else {
+            Debug.LogWarningFormat("Variable {0} doesn't exist.", pName);
             return null;
         }
     }

@@ -17,9 +17,9 @@ public class DialogueController : MonoBehaviour {
 
     private static DialogueController instance;
 
-    private void Assert<T>(T obj, string name) {
-        if (obj == null) {
-            Debug.LogErrorFormat("Error: {0} not found.", name);
+    private void Assert<T>(T pObj, string pName) {
+        if (pObj == null) {
+            Debug.LogErrorFormat("Error: {0} not found.", pName);
         }
     }
 
@@ -40,7 +40,8 @@ public class DialogueController : MonoBehaviour {
     private void Start() {
         // for test only
         StartDialogue();
-        SetAvatar("NPC", "happy");
+        string res = StringProcessor.ReplaceWithVariables("{{$state}}");
+        Debug.Log(res);
     }
 
     public void StartDialogue() {
@@ -51,16 +52,16 @@ public class DialogueController : MonoBehaviour {
         dialogueCanvas.gameObject.SetActive(false);
     }
 
-    public void SetAvatar(string name, string state = "") {
-        var chara = CharacterDatabase.Instance.GetCharacter(name);
+    public void SetAvatar(string pName, string pState = "") {
+        var chara = CharacterDatabase.Instance.GetCharacter(pName);
         AvatarInfo info = null;
         if (chara != null) {
-            if (state.Length == 0) {
+            if (pState.Length == 0) {
                 info = chara.defaultInfo;
             }
             else {
                 foreach (var ai in chara.states) {
-                    if (ai.name == state) {
+                    if (ai.name == pState) {
                         info = ai;
                         break;
                     }
@@ -86,5 +87,9 @@ public class DialogueController : MonoBehaviour {
                 }
             }
         }
+    }
+
+    public void ShowText(string pText, float pTime = -1.0f) { 
+
     }
 }
