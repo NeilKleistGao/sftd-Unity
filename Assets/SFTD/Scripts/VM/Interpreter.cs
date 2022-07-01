@@ -35,10 +35,18 @@ public struct ExecutedResult {
 }
 
 public class Interpreter : MonoBehaviour {
+    private struct OptionsData {
+        public int finalPosition;
+        public List<string> options;
+        public List<int> startPosition;
+    }
+
     private static Interpreter sInstance;
 
     private Dictionary<int, int> mCommandSize = new Dictionary<int, int>();
     private Dictionary<int, bool> mBuzy = new Dictionary<int, bool>();
+    private OptionsData mOptionsData = new OptionsData();
+    private int mPreviousType = -1;
 
     private void Awake() {
         sInstance = this;
@@ -240,6 +248,16 @@ public class Interpreter : MonoBehaviour {
         int pointer = 0;
         int op = ReadInt(ref pProgram, ref pointer);
 
+        if (mBuzy[pID]) {
+            result.type = ExecutedResultType.NOT_APPLIED;
+            return result;
+        }
+
+        if (op != 8 && mPreviousType == 8) {
+            DialogueController.Instance.ShowOptions(mOptionsData.options.ToArray());
+            //TODO:
+        }
+
         try {
             switch (op) {
                 case 0:
@@ -277,7 +295,7 @@ public class Interpreter : MonoBehaviour {
                     result.code = ReadInt(ref pProgram, ref pointer);
                     break;
                 case 8:
-                    result.type = ExecutedResultType.REQUIRE_NEXT;
+                    result.type = ExecutedResultType.JUMP;
                     break;
                 case 9:
                     result.type = ExecutedResultType.REQUIRE_NEXT;
@@ -330,6 +348,7 @@ public class Interpreter : MonoBehaviour {
             result.type = ExecutedResultType.FAILED;
         }
 
+        mPreviousType = op;
         return result;
     }
 
