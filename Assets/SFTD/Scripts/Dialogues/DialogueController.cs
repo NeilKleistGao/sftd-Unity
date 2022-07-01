@@ -28,7 +28,6 @@ public class DialogueController : MonoBehaviour {
 
     private float mSpeed = 1.0f;
     private Coroutine mTextCoroutine = null;
-    private Coroutine mSelectingCoroutine = null;
     private int mSelectedIndex = -1;
     private int mOptionsSize = 0;
     private DialogueOption[] mOptions = null;
@@ -61,12 +60,6 @@ public class DialogueController : MonoBehaviour {
 
     public static DialogueController Instance { 
         get { return instance; }
-    }
-
-    private void Start() {
-        // for test only
-        StartDialogue();
-        ShowOptions(new string[] { "test1", "test2", "test3" });
     }
 
     public void StartDialogue() {
@@ -166,7 +159,7 @@ public class DialogueController : MonoBehaviour {
         }
 
         mOptions[0].Select(mSelectedIndex);
-        mSelectingCoroutine = StartCoroutine(Select());
+        StartCoroutine(Select());
     }
 
     private IEnumerator Select() {
