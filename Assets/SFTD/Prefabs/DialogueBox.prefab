@@ -653,6 +653,9 @@ MonoBehaviour:
   mainContentText: {fileID: 690482003965446321}
   defaultFont: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   effectPlayer: {fileID: 5860969725660728142}
+  defaultEffect: {fileID: 0}
+  optionPrefab: {fileID: 918630638989410033, guid: 04ea115f1ce511d4ca26afad1d6a3617, type: 3}
+  optionsParent: {fileID: 1124250577735716595}
 --- !u!1 &690482004329981354
 GameObject:
   m_ObjectHideFlags: 0
@@ -742,7 +745,7 @@ GameObject:
   - component: {fileID: 7464597082351422277}
   - component: {fileID: 3291818046063806667}
   m_Layer: 5
-  m_Name: Choices
+  m_Name: Options
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

@@ -279,4 +279,12 @@ public class Interpreter : MonoBehaviour {
 
         return result;
     }
+
+    private void OnSelecting(int pIndex) {
+        Debug.Log(pIndex);
+    }
+
+    private void Start() {
+        DialogueController.Instance.OnSelecting.AddListener(OnSelecting);
+    }
 }
