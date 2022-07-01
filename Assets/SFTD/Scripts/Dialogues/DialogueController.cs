@@ -15,6 +15,9 @@ public class DialogueController : MonoBehaviour {
     [SerializeField] private AudioSource effectPlayer;
     [SerializeField] private AudioClip defaultEffect;
 
+    private float mSpeed = 1.0f;
+    private Coroutine mTextCoroutine = null;
+
     private static DialogueController instance;
 
     private void Assert<T>(T pObj, string pName) {
@@ -40,8 +43,8 @@ public class DialogueController : MonoBehaviour {
     private void Start() {
         // for test only
         StartDialogue();
-        string res = StringProcessor.ReplaceWithVariables("{{$state}}");
-        Debug.Log(res);
+        ShowText("Now state is: {{$state}}", 2);
+        Skip();
     }
 
     public void StartDialogue() {
@@ -89,7 +92,37 @@ public class DialogueController : MonoBehaviour {
         }
     }
 
-    public void ShowText(string pText, float pTime = -1.0f) { 
+    public float ShowText(string pText, float pTime = -1.0f) {
+        mainContentText.text = StringProcessor.ReplaceWithVariables(pText);
+        float time = pTime;
+        if (time < 0) {
+            mSpeed = defaultSpeed;
+            time = mainContentText.text.Length / mSpeed;
+        }
+        else if (time > 0) {
+            mSpeed = mainContentText.text.Length / time;
+        }
 
+        if (time > 0) {
+            mainContentText.maxVisibleCharacters = 0;
+            mTextCoroutine = StartCoroutine(TypeCharacter());
+        }
+
+        return time;
+    }
+
+    public void Skip() {
+        if (mTextCoroutine != null) {
+            mainContentText.maxVisibleCharacters = mainContentText.text.Length;
+            StopCoroutine(mTextCoroutine);
+            mTextCoroutine = null;
+        }
+    }
+
+    private IEnumerator TypeCharacter() {
+        while (mainContentText.maxVisibleCharacters < mainContentText.text.Length) {
+            ++mainContentText.maxVisibleCharacters;
+            yield return new WaitForSeconds(1.0f / mSpeed);
+        }
     }
 }
