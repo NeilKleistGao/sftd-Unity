@@ -646,10 +646,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   defaultSpeed: 1
-  mDialogueCanvas: {fileID: 690482002435554653}
-  mAvatar: {fileID: 690482003046764656}
-  mName: {fileID: 690482003298820175}
-  mMainContent: {fileID: 690482003965446321}
+  dialogueCanvas: {fileID: 690482002435554653}
+  avatarImage: {fileID: 690482003046764656}
+  nameText: {fileID: 690482003298820175}
+  mainContentText: {fileID: 690482003965446321}
+  defaultFont: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
 --- !u!1 &690482004329981354
 GameObject:
   m_ObjectHideFlags: 0

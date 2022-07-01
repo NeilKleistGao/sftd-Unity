@@ -6,11 +6,12 @@ using TMPro;
 
 public class DialogueController : MonoBehaviour {
     [SerializeField] private float defaultSpeed = 1.0f;
-    [SerializeField] private Canvas mDialogueCanvas;
+    [SerializeField] private Canvas dialogueCanvas;
 
-    [SerializeField] private Image mAvatar;
-    [SerializeField] private TMP_Text mName;
-    [SerializeField] private TMP_Text mMainContent;
+    [SerializeField] private Image avatarImage;
+    [SerializeField] private TMP_Text nameText;
+    [SerializeField] private TMP_Text mainContentText;
+    [SerializeField] private TMP_FontAsset defaultFont;
     // TODO: music
 
     private static DialogueController instance;
@@ -23,7 +24,7 @@ public class DialogueController : MonoBehaviour {
 
     private void Awake() {
         instance = this;
-        Assert(mDialogueCanvas, "Dialogue Canvas");
+        Assert(dialogueCanvas, "Dialogue Canvas");
     }
 
     public static DialogueController Instance { 
@@ -37,11 +38,11 @@ public class DialogueController : MonoBehaviour {
     }
 
     public void StartDialogue() {
-        mDialogueCanvas.gameObject.SetActive(true);
+        dialogueCanvas.gameObject.SetActive(true);
     }
 
     public void EndDialogue() {
-        mDialogueCanvas.gameObject.SetActive(false);
+        dialogueCanvas.gameObject.SetActive(false);
     }
 
     public void SetAvatar(string name, string state = "") {
@@ -61,9 +62,15 @@ public class DialogueController : MonoBehaviour {
             }
 
             if (info != null) {
-                mAvatar.sprite = info.avatar;
-                mName.text = name;
-                // TODO: font
+                avatarImage.sprite = info.avatar;
+                nameText.text = name;
+                if (info.font == null) {
+                    mainContentText.font = defaultFont;
+                }
+                else { 
+                    mainContentText.font = info.font;
+                }
+
                 // TODO: music
             }
         }
