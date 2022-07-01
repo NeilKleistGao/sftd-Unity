@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class StringDatabase : MonoBehaviour {
     private static StringDatabase sInstance = null;
-    private string languageCode = "en_GB";
+    [SerializeField] private string languageCode = "en_GB";
 
     private Dictionary<string, string> mTranslation = new Dictionary<string, string>();
 
