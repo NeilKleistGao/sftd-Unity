@@ -244,6 +244,43 @@ public class Interpreter : MonoBehaviour {
         }
     }
 
+    private void ExecuteAnimation(ref byte[] pProgram, ref int pPointer, ref string[] pStrings, ref string[] pSymbols) {
+        int targetID = ReadInt(ref pProgram, ref pPointer);
+        if (targetID >= pSymbols.Length) {
+            Debug.LogError("Character not found.");
+            return;
+        }
+
+        string target = pSymbols[targetID];
+        var cc = CharacterDatabase.Instance.GetController(target);
+        if (cc == null) {
+            Debug.LogErrorFormat("Character {0} not found.", target);
+            return;
+        }
+
+        int type = ReadInt(ref pProgram, ref pPointer);
+        string anime = "";
+        if (type == 0) {
+            int id = ReadInt(ref pProgram, ref pPointer);
+            if (id < 0) {
+                anime = VariableDatabase.Instance.GetString(id);
+            }
+            else {
+                string name = pSymbols[id];
+                anime = VariableDatabase.Instance.GetString(name);
+            }
+        }
+        else if (type == 1) {
+            anime = ReadString(ref pProgram, ref pPointer);
+        }
+        else {
+            Debug.LogError("Animation Runtime Error.");
+            return;
+        }
+
+        cc.PlayAnimation(anime);
+    }
+
     public ExecutedResult Execute(int pID, ref int pPointer, ref byte[] pProgram, ref string[] pStrings, ref string[] pSymbols) {
         ExecutedResult result = new ExecutedResult();
         int op = ReadInt(ref pProgram, ref pPointer);
@@ -313,7 +350,9 @@ public class Interpreter : MonoBehaviour {
                     mOptionsData.startPosition.Add(pPointer);
                     break;
                 case 9:
-                    result.type = ExecutedResultType.REQUIRE_NEXT;
+                    ExecuteAnimation(ref pProgram, ref pPointer, ref pStrings, ref pSymbols);
+                    result.type = ExecutedResultType.SUCCESS;
+                    mBuzy[pID] = true;
                     break;
                 case 10:
                     result.type = ExecutedResultType.REQUIRE_NEXT;
