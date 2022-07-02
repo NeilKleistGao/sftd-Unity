@@ -50,6 +50,10 @@ public class DialogueScript : MonoBehaviour {
         StringDatabase.Instance.LoadI18NFile(i18n);
     }
 
+    private void Jump(int pDelta) { 
+
+    }
+
     private bool TryToStart(ref Dictionary<int, DialogueData> pList) {
         var interpreter = Interpreter.Instance;
         bool found = false;
@@ -67,6 +71,7 @@ public class DialogueScript : MonoBehaviour {
                         found = end = true;
                         break;
                     case ExecutedResultType.CALL:
+                    case ExecutedResultType.GOTO:
                     case ExecutedResultType.FAILED:
                         mPointer = -1;
                         Debug.LogError("Runtime Error!");
@@ -77,7 +82,7 @@ public class DialogueScript : MonoBehaviour {
                         end = true;
                         break;
                     case ExecutedResultType.JUMP:
-                        mPointer += res.code;
+                        Jump(res.code);
                         break;
                     case ExecutedResultType.REQUIRE_NEXT:
                         ++mPointer;
@@ -139,6 +144,11 @@ public class DialogueScript : MonoBehaviour {
                         mCurrentDialogue = mIL.defaultDialogues[res.code];
                         break;
                     }
+                case ExecutedResultType.GOTO: {
+                        mPointer = 0;
+                        mCurrentDialogue = mIL.defaultDialogues[res.code];
+                        break;
+                    }
                 case ExecutedResultType.FAILED:
                     mPointer = -1;
                     Debug.LogError("Runtime Error!");
@@ -148,7 +158,7 @@ public class DialogueScript : MonoBehaviour {
                     end = true;
                     break;
                 case ExecutedResultType.JUMP:
-                    mPointer += res.code;
+                    Jump(res.code);
                     break;
                 case ExecutedResultType.REQUIRE_NEXT:
                     ++mPointer;

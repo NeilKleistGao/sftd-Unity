@@ -24,7 +24,8 @@ public enum ExecutedResultType {
     FAILED, // runtime error
     NOT_APPLIED, // not available yet
     CALL, // call another one
-    JUMP, // jump to another one
+    JUMP, // jump to another local place
+    GOTO, // jump to another dialogue process
     REQUIRE_NEXT, // need next command now
     END
 }
@@ -255,6 +256,7 @@ public class Interpreter : MonoBehaviour {
 
         if (op != 8 && mPreviousType == 8) {
             DialogueController.Instance.ShowOptions(mOptionsData.options.ToArray());
+            mOptionsData.options.Clear();
             //TODO:
         }
 
@@ -291,7 +293,7 @@ public class Interpreter : MonoBehaviour {
                     result.code = ReadInt(ref pProgram, ref pointer);
                     break;
                 case 7:
-                    result.type = ExecutedResultType.JUMP;
+                    result.type = ExecutedResultType.GOTO;
                     result.code = ReadInt(ref pProgram, ref pointer);
                     break;
                 case 8:
