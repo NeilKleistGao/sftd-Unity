@@ -37,7 +37,6 @@ public struct ExecutedResult {
 
 public class Interpreter : MonoBehaviour {
     private struct OptionsData {
-        public int finalPosition;
         public List<string> options;
         public List<int> startPosition;
     }
@@ -48,6 +47,7 @@ public class Interpreter : MonoBehaviour {
     private Dictionary<int, bool> mBuzy = new Dictionary<int, bool>();
     private OptionsData mOptionsData = new OptionsData();
     private int mPreviousType = -1;
+    private int mSelectedPos = -1;
 
     private void Awake() {
         sInstance = this;
@@ -254,9 +254,19 @@ public class Interpreter : MonoBehaviour {
         }
 
         if (op != 8 && mPreviousType == 8) {
-            DialogueController.Instance.ShowOptions(mOptionsData.options.ToArray());
-            mOptionsData.options.Clear();
-            //TODO:
+            if (mSelectedPos == -1) {
+                DialogueController.Instance.ShowOptions(mOptionsData.options.ToArray());
+                result.type = ExecutedResultType.NOT_APPLIED;
+                mBuzy[pID] = true;
+            }
+            else {
+                mBuzy[pID] = false;
+                result.type = ExecutedResultType.JUMP;
+                result.code = mSelectedPos;
+                mSelectedPos = -1;
+            }
+
+            return result;
         }
 
         try {
@@ -299,6 +309,8 @@ public class Interpreter : MonoBehaviour {
                     result.type = ExecutedResultType.JUMP;
                     string s = pStrings[ReadInt(ref pProgram, ref pPointer)];
                     result.code = ReadInt(ref pProgram, ref pPointer);
+                    mOptionsData.options.Add(s);
+                    mOptionsData.startPosition.Add(pPointer);
                     break;
                 case 9:
                     result.type = ExecutedResultType.REQUIRE_NEXT;
@@ -337,6 +349,10 @@ public class Interpreter : MonoBehaviour {
                 case 29:
                     result.type = ExecutedResultType.REQUIRE_NEXT;
                     break;
+                case 30:
+                    result.type = ExecutedResultType.JUMP;
+                    result.code = ReadInt(ref pProgram, ref pPointer);
+                    break;
                 case 255:
                     DialogueController.Instance.EndDialogue();
                     result.type = ExecutedResultType.END;
@@ -356,6 +372,7 @@ public class Interpreter : MonoBehaviour {
     }
 
     private void OnSelecting(int pIndex) {
+        mSelectedPos = mOptionsData.startPosition[pIndex];
     }
 
     private void Start() {
