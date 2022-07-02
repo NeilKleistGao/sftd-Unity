@@ -213,6 +213,70 @@ public class Interpreter : MonoBehaviour {
         return pack;
     }
 
+    private CharacterController GetController(ref byte[] pProgram, ref int pPointer, ref string[] pSymbols) {
+        int targetID = ReadInt(ref pProgram, ref pPointer);
+        if (targetID >= pSymbols.Length) {
+            Debug.LogError("Character not found.");
+            return null;
+        }
+
+        string target = pSymbols[targetID];
+        var cc = CharacterDatabase.Instance.GetController(target);
+        if (cc == null) {
+            Debug.LogErrorFormat("Character {0} not found.", target);
+        }
+
+        return cc;
+    }
+
+    private string GetString(ref byte[] pProgram, ref int pPointer, ref string[] pStrings, ref string[] pSymbols) {
+        int type = ReadInt(ref pProgram, ref pPointer);
+        string str = "";
+        if (type == 0) {
+            int id = ReadInt(ref pProgram, ref pPointer);
+            if (id < 0) {
+                str = VariableDatabase.Instance.GetString(id);
+            }
+            else {
+                string name = pSymbols[id];
+                str = VariableDatabase.Instance.GetString(name);
+            }
+        }
+        else if (type == 1) {
+            str = pStrings[ReadInt(ref pProgram, ref pPointer)];
+        }
+        else {
+            Debug.LogError("GetString Runtime Error.");
+        }
+
+        return str;
+    }
+
+    private float GetFloat(ref byte[] pProgram, ref int pPointer, ref string[] pStrings, ref string[] pSymbols) {
+        int type = ReadInt(ref pProgram, ref pPointer);
+        float f = 0.0f;
+        if (type == 0) {
+            int pos = ReadInt(ref pProgram, ref pPointer);
+            if (pos < 0) {
+                f = VariableDatabase.Instance.GetFloat(pos);
+            }
+            else {
+                f = VariableDatabase.Instance.GetFloat(pSymbols[pos]);
+            }
+        }
+        else if (type == 2) {
+            f = ReadInt(ref pProgram, ref pPointer);
+        }
+        else if (type == 3) {
+            f = ReadFloat(ref pProgram, ref pPointer);
+        }
+        else {
+            Debug.LogError("GetFloat Runtime Error.");
+        }
+
+        return f;
+    }
+
     private void ExecuteSpeak(int op, ref byte[] pProgram, ref int pPointer, ref string[] pStrings, ref string[] pSymbols) {
         int id = ReadInt(ref pProgram, ref pPointer);
         string str = StringDatabase.Instance.GetString(pStrings[id]);
@@ -220,90 +284,28 @@ public class Interpreter : MonoBehaviour {
             DialogueController.Instance.ShowText(str);
         }
         else {
-            int type = ReadInt(ref pProgram, ref pPointer);
-            float time = -1.0f;
-            if (type == 0) {
-                int pos = ReadInt(ref pProgram, ref pPointer);
-                if (pos < 0) {
-                    time = VariableDatabase.Instance.GetFloat(pos);
-                }
-                else {
-                    time = VariableDatabase.Instance.GetFloat(pSymbols[pos]);
-                }
-            }
-            else if (type == 2) {
-                time = ReadInt(ref pProgram, ref pPointer);
-            }
-            else if (type == 3) {
-                time = ReadFloat(ref pProgram, ref pPointer);
-            }
-            else {
-                Debug.LogError("Runtime Error.");
-            }
-
+            float time = GetFloat(ref pProgram, ref pPointer, ref pStrings, ref pStrings);
             DialogueController.Instance.ShowText(str, time);
         }
     }
 
     private void ExecuteAnimation(ref byte[] pProgram, ref int pPointer, ref string[] pStrings, ref string[] pSymbols) {
-        int targetID = ReadInt(ref pProgram, ref pPointer);
-        if (targetID >= pSymbols.Length) {
-            Debug.LogError("Character not found.");
-            return;
-        }
-
-        string target = pSymbols[targetID];
-        var cc = CharacterDatabase.Instance.GetController(target);
+        var cc = GetController(ref pProgram, ref pPointer, ref pSymbols);
         if (cc == null) {
-            Debug.LogErrorFormat("Character {0} not found.", target);
             return;
         }
 
-        int type = ReadInt(ref pProgram, ref pPointer);
-        string anime = "";
-        if (type == 0) {
-            int id = ReadInt(ref pProgram, ref pPointer);
-            if (id < 0) {
-                anime = VariableDatabase.Instance.GetString(id);
-            }
-            else {
-                string name = pSymbols[id];
-                anime = VariableDatabase.Instance.GetString(name);
-            }
-        }
-        else if (type == 1) {
-            anime = pStrings[ReadInt(ref pProgram, ref pPointer)];
-        }
-        else {
-            Debug.LogError("Animation Runtime Error.");
-            return;
-        }
-
+        string anime = GetString(ref pProgram, ref pPointer, ref pStrings, ref pStrings);
         cc.PlayAnimation(anime);
     }
 
     private void ExecuteSound(ref byte[] pProgram, ref int pPointer, ref string[] pStrings, ref string[] pSymbols) {
-        int type = ReadInt(ref pProgram, ref pPointer);
-        string sound = "";
-        if (type == 0) {
-            int id = ReadInt(ref pProgram, ref pPointer);
-            if (id < 0) {
-                sound = VariableDatabase.Instance.GetString(id);
-            }
-            else {
-                string name = pSymbols[id];
-                sound = VariableDatabase.Instance.GetString(name);
-            }
-        }
-        else if (type == 1) {
-            sound = pStrings[ReadInt(ref pProgram, ref pPointer)];
-        }
-        else {
-            Debug.LogError("Sound Runtime Error.");
-            return;
-        }
-
+        string sound = GetString(ref pProgram, ref pPointer, ref pStrings, ref pStrings);
         DialogueController.Instance.PlaySoundEffect(sound);
+    }
+
+    private void ExecuteMove(ref byte[] pProgram, ref int pPointer, ref string[] pStrings, ref string[] pSymbols) { 
+
     }
 
     public ExecutedResult Execute(int pID, ref int pPointer, ref byte[] pProgram, ref string[] pStrings, ref string[] pSymbols) {
@@ -384,6 +386,7 @@ public class Interpreter : MonoBehaviour {
                     result.type = ExecutedResultType.REQUIRE_NEXT;
                     break;
                 case 11:
+                    ExecuteMove(ref pProgram, ref pPointer, ref pStrings, ref pSymbols);
                     result.type = ExecutedResultType.SUCCESS;
                     break;
                 case 12:
