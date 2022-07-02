@@ -82,6 +82,7 @@ public class Interpreter : MonoBehaviour {
         mCommandSize.Add(27, 3);
         mCommandSize.Add(28, -1);
         mCommandSize.Add(29, 4);
+        mCommandSize.Add(30, 2);
         mCommandSize.Add(255, 1);
     }
 
