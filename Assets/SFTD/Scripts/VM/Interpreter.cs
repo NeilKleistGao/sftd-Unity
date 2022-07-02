@@ -272,7 +272,7 @@ public class Interpreter : MonoBehaviour {
             }
         }
         else if (type == 1) {
-            anime = ReadString(ref pProgram, ref pPointer);
+            anime = pStrings[ReadInt(ref pProgram, ref pPointer)];
         }
         else {
             Debug.LogError("Animation Runtime Error.");
@@ -280,6 +280,10 @@ public class Interpreter : MonoBehaviour {
         }
 
         cc.PlayAnimation(anime);
+    }
+
+    private void ExecuteSound() { 
+
     }
 
     public ExecutedResult Execute(int pID, ref int pPointer, ref byte[] pProgram, ref string[] pStrings, ref string[] pSymbols) {
