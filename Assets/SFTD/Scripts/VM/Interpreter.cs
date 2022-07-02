@@ -282,8 +282,28 @@ public class Interpreter : MonoBehaviour {
         cc.PlayAnimation(anime);
     }
 
-    private void ExecuteSound() { 
+    private void ExecuteSound(ref byte[] pProgram, ref int pPointer, ref string[] pStrings, ref string[] pSymbols) {
+        int type = ReadInt(ref pProgram, ref pPointer);
+        string sound = "";
+        if (type == 0) {
+            int id = ReadInt(ref pProgram, ref pPointer);
+            if (id < 0) {
+                sound = VariableDatabase.Instance.GetString(id);
+            }
+            else {
+                string name = pSymbols[id];
+                sound = VariableDatabase.Instance.GetString(name);
+            }
+        }
+        else if (type == 1) {
+            sound = pStrings[ReadInt(ref pProgram, ref pPointer)];
+        }
+        else {
+            Debug.LogError("Sound Runtime Error.");
+            return;
+        }
 
+        DialogueController.Instance.PlaySoundEffect(sound);
     }
 
     public ExecutedResult Execute(int pID, ref int pPointer, ref byte[] pProgram, ref string[] pStrings, ref string[] pSymbols) {
@@ -360,6 +380,7 @@ public class Interpreter : MonoBehaviour {
                     mBuzy[pID] = true;
                     break;
                 case 10:
+                    ExecuteSound(ref pProgram, ref pPointer, ref pStrings, ref pSymbols);
                     result.type = ExecutedResultType.REQUIRE_NEXT;
                     break;
                 case 11:
