@@ -277,6 +277,28 @@ public class Interpreter : MonoBehaviour {
         return f;
     }
 
+    private bool GetBool(ref byte[] pProgram, ref int pPointer, ref string[] pStrings, ref string[] pSymbols) {
+        int type = ReadInt(ref pProgram, ref pPointer);
+        bool b = false;
+        if (type == 0) {
+            int pos = ReadInt(ref pProgram, ref pPointer);
+            if (pos < 0) {
+                b = VariableDatabase.Instance.GetBool(pos);
+            }
+            else {
+                b = VariableDatabase.Instance.GetBool(pSymbols[pos]);
+            }
+        }
+        else if (type == 4) {
+            b = ReadInt(ref pProgram, ref pPointer) != 0;
+        }
+        else {
+            Debug.LogError("GetBool Runtime Error.");
+        }
+
+        return b;
+    }
+
     private void ExecuteSpeak(int op, ref byte[] pProgram, ref int pPointer, ref string[] pStrings, ref string[] pSymbols) {
         int id = ReadInt(ref pProgram, ref pPointer);
         string str = StringDatabase.Instance.GetString(pStrings[id]);
@@ -304,8 +326,16 @@ public class Interpreter : MonoBehaviour {
         DialogueController.Instance.PlaySoundEffect(sound);
     }
 
-    private void ExecuteMove(ref byte[] pProgram, ref int pPointer, ref string[] pStrings, ref string[] pSymbols) { 
+    private void ExecuteMove(ref byte[] pProgram, ref int pPointer, ref string[] pStrings, ref string[] pSymbols) {
+        var cc = GetController(ref pProgram, ref pPointer, ref pSymbols);
+        if (cc == null) {
+            return;
+        }
 
+        Vector2 dis = new Vector2(GetFloat(ref pProgram, ref pPointer, ref pStrings, ref pStrings),
+            GetFloat(ref pProgram, ref pPointer, ref pStrings, ref pStrings));
+        float time = GetFloat(ref pProgram, ref pPointer, ref pStrings, ref pStrings);
+        cc.MoveBy(dis, time);
     }
 
     public ExecutedResult Execute(int pID, ref int pPointer, ref byte[] pProgram, ref string[] pStrings, ref string[] pSymbols) {
@@ -390,7 +420,9 @@ public class Interpreter : MonoBehaviour {
                     result.type = ExecutedResultType.SUCCESS;
                     break;
                 case 12:
-                    //TODO:
+                    bool test = GetBool(ref pProgram, ref pPointer, ref pStrings, ref pSymbols);
+                    result.type = (test) ? ExecutedResultType.REQUIRE_NEXT : ExecutedResultType.JUMP;
+                    result.code = ReadInt(ref pProgram, ref pPointer);
                     break;
                 case 13:
                 case 14:
