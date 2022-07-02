@@ -50,10 +50,6 @@ public class DialogueScript : MonoBehaviour {
         StringDatabase.Instance.LoadI18NFile(i18n);
     }
 
-    private void Jump(int pDelta) { 
-
-    }
-
     private bool TryToStart(ref Dictionary<int, DialogueData> pList) {
         var interpreter = Interpreter.Instance;
         bool found = false;
@@ -63,7 +59,7 @@ public class DialogueScript : MonoBehaviour {
             mPointer = 0;
 
             do {
-                var res = interpreter.Execute(GetHashCode(), ref dialogue.commands[mPointer], ref mIL.strings, ref mIL.symbols);
+                var res = interpreter.Execute(GetHashCode(), ref mPointer, ref dialogue.commands, ref mIL.strings, ref mIL.symbols);
 
                 switch (res.type) {
                     case ExecutedResultType.SUCCESS:
@@ -82,7 +78,7 @@ public class DialogueScript : MonoBehaviour {
                         end = true;
                         break;
                     case ExecutedResultType.JUMP:
-                        Jump(res.code);
+                        mPointer = res.code;
                         break;
                     case ExecutedResultType.REQUIRE_NEXT:
                         ++mPointer;
@@ -129,7 +125,7 @@ public class DialogueScript : MonoBehaviour {
         bool end = false;
 
         do {
-            var res = interpreter.Execute(GetHashCode(), ref mCurrentDialogue.commands[mPointer], ref mIL.strings, ref mIL.symbols);
+            var res = interpreter.Execute(GetHashCode(), ref mPointer, ref mCurrentDialogue.commands, ref mIL.strings, ref mIL.symbols);
 
             switch (res.type) {
                 case ExecutedResultType.SUCCESS:
@@ -158,7 +154,7 @@ public class DialogueScript : MonoBehaviour {
                     end = true;
                     break;
                 case ExecutedResultType.JUMP:
-                    Jump(res.code);
+                    mPointer = res.code;
                     break;
                 case ExecutedResultType.REQUIRE_NEXT:
                     ++mPointer;

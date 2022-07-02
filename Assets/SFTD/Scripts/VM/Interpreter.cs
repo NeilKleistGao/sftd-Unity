@@ -5,7 +5,7 @@ using System.Text;
 using UnityEngine;
 
 public struct DialogueData {
-    public byte[][] commands;
+    public byte[] commands;
 }
 
 public struct DialogueILPack {
@@ -119,7 +119,7 @@ public class Interpreter : MonoBehaviour {
     private DialogueData ParseDialogue(ref byte[] pContent, ref int pPointer) {
         DialogueData data = new DialogueData();
         int count = ReadInt(ref pContent, ref pPointer);
-        data.commands = new byte[count][];
+        var temp = new List<byte>();
 
         for (int i = 0; i < count; ++i) {
             int pos = pPointer;
@@ -139,13 +139,13 @@ public class Interpreter : MonoBehaviour {
             }
 
             size <<= 2;
-            data.commands[i] = new byte[size];
             for (int j = 0; j < size; ++j) {
-                data.commands[i][j] = pContent[pPointer];
+                temp.Add(pContent[pPointer]);
                 ++pPointer;
             }
         }
 
+        data.commands = temp.ToArray();
         return data;
     }
 
@@ -244,10 +244,9 @@ public class Interpreter : MonoBehaviour {
         }
     }
 
-    public ExecutedResult Execute(int pID, ref byte[] pProgram, ref string[] pStrings, ref string[] pSymbols) {
+    public ExecutedResult Execute(int pID, ref int pPointer, ref byte[] pProgram, ref string[] pStrings, ref string[] pSymbols) {
         ExecutedResult result = new ExecutedResult();
-        int pointer = 0;
-        int op = ReadInt(ref pProgram, ref pointer);
+        int op = ReadInt(ref pProgram, ref pPointer);
 
         if (mBuzy[pID]) {
             result.type = ExecutedResultType.NOT_APPLIED;
@@ -270,12 +269,12 @@ public class Interpreter : MonoBehaviour {
                     break;
                 case 2:
                 case 3: {
-                        string name = ReadString(ref pProgram, ref pointer);
+                        string name = ReadString(ref pProgram, ref pPointer);
                         if (op == 2) {
                             DialogueController.Instance.SetAvatar(name);
                         }
                         else {
-                            string state = ReadString(ref pProgram, ref pointer);
+                            string state = ReadString(ref pProgram, ref pPointer);
                             DialogueController.Instance.SetAvatar(name, state);
                         }
                         
@@ -284,20 +283,22 @@ public class Interpreter : MonoBehaviour {
                     }
                 case 4:
                 case 5: {
-                        ExecuteSpeak(op, ref pProgram, ref pointer, ref pStrings, ref pSymbols);
+                        ExecuteSpeak(op, ref pProgram, ref pPointer, ref pStrings, ref pSymbols);
                         result.type = ExecutedResultType.SUCCESS;
                         break;
                     }
                 case 6:
                     result.type = ExecutedResultType.CALL;
-                    result.code = ReadInt(ref pProgram, ref pointer);
+                    result.code = ReadInt(ref pProgram, ref pPointer);
                     break;
                 case 7:
                     result.type = ExecutedResultType.GOTO;
-                    result.code = ReadInt(ref pProgram, ref pointer);
+                    result.code = ReadInt(ref pProgram, ref pPointer);
                     break;
                 case 8:
                     result.type = ExecutedResultType.JUMP;
+                    string s = pStrings[ReadInt(ref pProgram, ref pPointer)];
+                    result.code = ReadInt(ref pProgram, ref pPointer);
                     break;
                 case 9:
                     result.type = ExecutedResultType.REQUIRE_NEXT;
