@@ -381,7 +381,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: af7a2feb70523aa40b0c9ebd8087fc62, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mAnimator: {fileID: 0}
+  mName: NPC
+  animator: {fileID: 0}
 --- !u!212 &884523563
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -444,7 +445,7 @@ Animator:
   m_GameObject: {fileID: 884523559}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: a3cbe5d639cd3324a94161a8e50a1beb, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -643,7 +644,7 @@ Animator:
   m_GameObject: {fileID: 1414919234}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 9f5a999aec12f9c4dbd08595159867a9, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -773,7 +774,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1019056104804723439, guid: 8342d21e6ad05ad4191895aeebed8588, type: 3}
       propertyPath: controllers.Array.size
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1019056104804723439, guid: 8342d21e6ad05ad4191895aeebed8588, type: 3}
       propertyPath: characters.Array.data[0]
@@ -783,6 +784,10 @@ PrefabInstance:
       propertyPath: characters.Array.data[1]
       value: 
       objectReference: {fileID: 11400000, guid: 7083c0f547e971e4da4ecdb8bb0381b8, type: 2}
+    - target: {fileID: 1019056104804723439, guid: 8342d21e6ad05ad4191895aeebed8588, type: 3}
+      propertyPath: controllers.Array.data[0]
+      value: 
+      objectReference: {fileID: 884523562}
     - target: {fileID: 3371195054106562218, guid: 8342d21e6ad05ad4191895aeebed8588, type: 3}
       propertyPath: m_RootOrder
       value: 2
@@ -830,6 +835,10 @@ PrefabInstance:
     - target: {fileID: 3371195054106562219, guid: 8342d21e6ad05ad4191895aeebed8588, type: 3}
       propertyPath: m_Name
       value: Interpreter
+      objectReference: {fileID: 0}
+    - target: {fileID: 5104060603823011965, guid: 8342d21e6ad05ad4191895aeebed8588, type: 3}
+      propertyPath: events.Array.size
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5896796535553027119, guid: 8342d21e6ad05ad4191895aeebed8588, type: 3}
       propertyPath: variables.Array.size

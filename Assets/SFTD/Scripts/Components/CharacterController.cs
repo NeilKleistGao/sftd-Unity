@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class CharacterController : MonoBehaviour {
-    protected string mName;
+    [SerializeField] protected string mName;
     protected Vector2 mVelocity = Vector2.zero;
     protected float mTimer = 0.0f;
-    [SerializeField] protected Animator mAnimator;
+    [SerializeField] protected Animator animator;
 
     public string Name { 
         get { return mName; }
@@ -14,11 +14,11 @@ public class CharacterController : MonoBehaviour {
     }
 
     public virtual void PlayAnimation(string pName) {
-        if (mAnimator == null) {
+        if (animator == null) {
             Debug.LogErrorFormat("{0} does not have an animator component.");
             return;
         }
-        mAnimator.Play(pName);
+        animator.Play(pName);
     }
 
     public virtual void MoveBy(Vector2 pDis, float pTime) {
@@ -39,7 +39,7 @@ public class CharacterController : MonoBehaviour {
     }
 
     public virtual bool HasAnimationEnded() {
-        AnimatorStateInfo info = mAnimator.GetCurrentAnimatorStateInfo(0);
+        AnimatorStateInfo info = animator.GetCurrentAnimatorStateInfo(0);
         return info.normalizedTime > 0.99f;
     }
 
