@@ -436,6 +436,11 @@ public class Interpreter : MonoBehaviour {
         }
     }
 
+    private IEnumerator DelayDialogue(int pID, float pTime) {
+        yield return new WaitForSeconds(pTime);
+        mBuzy[pID] = false;
+    }
+
     public ExecutedResult Execute(int pID, ref int pPointer, ref byte[] pProgram, ref string[] pStrings, ref string[] pSymbols) {
         ExecutedResult result = new ExecutedResult();
         int op = ReadInt(ref pProgram, ref pPointer);
@@ -540,6 +545,9 @@ public class Interpreter : MonoBehaviour {
                     result.type = ExecutedResultType.REQUIRE_NEXT;
                     break;
                 case 27:
+                    mBuzy[pID] = true;
+                    float time = GetFloat(ref pProgram, ref pPointer, ref pStrings, ref pSymbols);
+                    StartCoroutine(DelayDialogue(pID, time));
                     result.type = ExecutedResultType.SUCCESS;
                     break;
                 case 28:
