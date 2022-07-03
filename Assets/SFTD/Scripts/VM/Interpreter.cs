@@ -427,7 +427,7 @@ public class Interpreter : MonoBehaviour {
             res = f(lhs, rhs);
         }
 
-        if (target > 0) {
+        if (target >= 0) {
             string name = pSymbols[target];
             VariableDatabase.Instance.Set(name, res);
         }
@@ -439,6 +439,18 @@ public class Interpreter : MonoBehaviour {
     private IEnumerator DelayDialogue(int pID, float pTime) {
         yield return new WaitForSeconds(pTime);
         mBuzy[pID] = false;
+    }
+
+    private void ExecuteSet(ref byte[] pProgram, ref int pPointer, ref string[] pStrings, ref string[] pSymbols) {
+        int target = ReadInt(ref pProgram, ref pPointer);
+        var res = GetAny(ref pProgram, ref pPointer, ref pStrings, ref pSymbols);
+        if (target >= 0) {
+            string name = pSymbols[target];
+            VariableDatabase.Instance.Set(name, res);
+        }
+        else {
+            VariableDatabase.Instance.SetTempVariable(target, res);
+        }
     }
 
     public ExecutedResult Execute(int pID, ref int pPointer, ref byte[] pProgram, ref string[] pStrings, ref string[] pSymbols) {
@@ -554,6 +566,7 @@ public class Interpreter : MonoBehaviour {
                     result.type = ExecutedResultType.REQUIRE_NEXT;
                     break;
                 case 29:
+                    ExecuteSet(ref pProgram, ref pPointer, ref pStrings, ref pSymbols);
                     result.type = ExecutedResultType.REQUIRE_NEXT;
                     break;
                 case 30:
