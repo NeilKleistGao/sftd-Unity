@@ -43,6 +43,23 @@ public class VariableDatabase : MonoBehaviour {
         get { return instance; }
     }
 
+    public void Set(string pName, VariableData value) {
+        switch (value.type) { 
+            case VariableType.STRING:
+                Set(pName, value.s);
+                break;
+            case VariableType.INT:
+                Set(pName, value.i);
+                break;
+            case VariableType.FLOAT:
+                Set(pName, value.f);
+                break;
+            case VariableType.BOOL:
+                Set(pName, value.b);
+                break;
+        }
+    } 
+
     public void Set(string pName, int value) {
         if (mNameMapping.ContainsKey(pName)) {
             int i = mNameMapping[pName];
@@ -175,6 +192,14 @@ public class VariableDatabase : MonoBehaviour {
             Debug.LogWarningFormat("Variable {0} doesn't exist.", pName);
             return null;
         }
+    }
+
+    public VariableData GetNamedVariable(string pName) {
+        if (mNameMapping.ContainsKey(pName)) {
+            return variables[mNameMapping[pName]];
+        }
+
+        throw new Exception("Unknown variable.");
     }
 
     public VariableData GetTempVariable(int index) {

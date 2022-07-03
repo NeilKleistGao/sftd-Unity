@@ -299,6 +299,44 @@ public class Interpreter : MonoBehaviour {
         return b;
     }
 
+    private VariableData GetAny(ref byte[] pProgram, ref int pPointer, ref string[] pStrings, ref string[] pSymbols) {
+        int type = ReadInt(ref pProgram, ref pPointer);
+        VariableData data = new VariableData();
+
+        if (type == 0) {
+            int id = ReadInt(ref pProgram, ref pPointer);
+            if (id > 0) {
+                string name = pSymbols[id];
+                data = VariableDatabase.Instance.GetNamedVariable(name);
+            }
+            else {
+                data = VariableDatabase.Instance.GetTempVariable(id);
+            }
+        }
+        else if (type == 1) {
+            data.type = VariableType.STRING;
+            int id = ReadInt(ref pProgram, ref pPointer);
+            data.s = pStrings[id];
+        }
+        else if (type == 2) {
+            data.type = VariableType.INT;
+            data.i = ReadInt(ref pProgram, ref pPointer);
+        }
+        else if (type == 3) {
+            data.type = VariableType.FLOAT;
+            data.f = ReadFloat(ref pProgram, ref pPointer);
+        }
+        else if (type == 4) {
+            data.type = VariableType.BOOL;
+            data.b = ReadInt(ref pProgram, ref pPointer) != 0;
+        }
+        else {
+            Debug.LogError("GetVariable Runtime Error.");
+        }
+
+        return data;
+    }
+
     private void ExecuteSpeak(int op, ref byte[] pProgram, ref int pPointer, ref string[] pStrings, ref string[] pSymbols) {
         int id = ReadInt(ref pProgram, ref pPointer);
         string str = StringDatabase.Instance.GetString(pStrings[id]);
@@ -332,10 +370,70 @@ public class Interpreter : MonoBehaviour {
             return;
         }
 
-        Vector2 dis = new Vector2(GetFloat(ref pProgram, ref pPointer, ref pStrings, ref pStrings),
-            GetFloat(ref pProgram, ref pPointer, ref pStrings, ref pStrings));
-        float time = GetFloat(ref pProgram, ref pPointer, ref pStrings, ref pStrings);
+        Vector2 dis = new Vector2(GetFloat(ref pProgram, ref pPointer, ref pStrings, ref pSymbols),
+            GetFloat(ref pProgram, ref pPointer, ref pStrings, ref pSymbols));
+        float time = GetFloat(ref pProgram, ref pPointer, ref pStrings, ref pSymbols);
         cc.MoveBy(dis, time);
+    }
+
+    private void Calculate(int op, ref byte[] pProgram, ref int pPointer, ref string[] pStrings, ref string[] pSymbols) {
+        int target = ReadInt(ref pProgram, ref pPointer);
+        VariableData res;
+        if (op == 21 || op == 22) {
+            Calculator.UnaryOperator f = (op == 21) ? Calculator.CalculateNot : Calculator.CalculateNeg;
+            var v = GetAny(ref pProgram, ref pPointer, ref pStrings, ref pSymbols);
+            res = f(v);
+        }
+        else {
+            Calculator.BinaryOperator f = Calculator.CalculateAdd;
+            switch (op) {
+                case 14:
+                    f = Calculator.CalculateSub;
+                    break;
+                case 15:
+                    f = Calculator.CalculateMul;
+                    break;
+                case 16:
+                    f = Calculator.CalculateDiv;
+                    break;
+                case 17:
+                    f = Calculator.CalculateMod;
+                    break;
+                case 18:
+                    f = Calculator.CalculateEqual;
+                    break;
+                case 19:
+                    f = Calculator.CalculateAnd;
+                    break;
+                case 20:
+                    f = Calculator.CalculateOr;
+                    break;
+                case 23:
+                    f = Calculator.CalculateLess;
+                    break;
+                case 24:
+                    f = Calculator.CalculateGreater;
+                    break;
+                case 25:
+                    f = Calculator.CalculateLE;
+                    break;
+                case 26:
+                    f = Calculator.CalculateGE;
+                    break;
+            }
+
+            var lhs = GetAny(ref pProgram, ref pPointer, ref pStrings, ref pSymbols);
+            var rhs = GetAny(ref pProgram, ref pPointer, ref pStrings, ref pSymbols);
+            res = f(lhs, rhs);
+        }
+
+        if (target > 0) {
+            string name = pSymbols[target];
+            VariableDatabase.Instance.Set(name, res);
+        }
+        else {
+            VariableDatabase.Instance.SetTempVariable(target, res);
+        }
     }
 
     public ExecutedResult Execute(int pID, ref int pPointer, ref byte[] pProgram, ref string[] pStrings, ref string[] pSymbols) {
@@ -438,6 +536,7 @@ public class Interpreter : MonoBehaviour {
                 case 24:
                 case 25:
                 case 26:
+                    Calculate(op, ref pProgram, ref pPointer, ref pStrings, ref pSymbols);
                     result.type = ExecutedResultType.REQUIRE_NEXT;
                     break;
                 case 27:
