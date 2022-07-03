@@ -441,6 +441,19 @@ public class Interpreter : MonoBehaviour {
         mBuzy[pID] = false;
     }
 
+    private void ExecutePublish(ref byte[] pProgram, ref int pPointer, ref string[] pStrings, ref string[] pSymbols) { 
+        int id = ReadInt(ref pProgram, ref pPointer);
+        string name = pSymbols[id];
+
+        List<VariableData> variables = new List<VariableData>();
+        int count = ReadInt(ref pProgram, ref pPointer);
+        for (int i = 0; i < count; ++i) { 
+            variables.Add(GetAny(ref pProgram, ref pPointer, ref pStrings, ref pSymbols));
+        }
+
+        EventsDatabase.Instance.Publish(name, variables);
+    }
+
     private void ExecuteSet(ref byte[] pProgram, ref int pPointer, ref string[] pStrings, ref string[] pSymbols) {
         int target = ReadInt(ref pProgram, ref pPointer);
         var res = GetAny(ref pProgram, ref pPointer, ref pStrings, ref pSymbols);
@@ -563,6 +576,7 @@ public class Interpreter : MonoBehaviour {
                     result.type = ExecutedResultType.SUCCESS;
                     break;
                 case 28:
+                    ExecutePublish(ref pProgram, ref pPointer, ref pStrings, ref pSymbols);
                     result.type = ExecutedResultType.REQUIRE_NEXT;
                     break;
                 case 29:
