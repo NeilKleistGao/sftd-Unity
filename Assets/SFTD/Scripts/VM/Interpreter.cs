@@ -549,6 +549,7 @@ public class Interpreter : MonoBehaviour {
                     mOptionsData.startPosition.Add(pPointer);
                     break;
                 case 9:
+                    DialogueController.Instance.EndDialogue();
                     ExecuteAnimation(ref pProgram, ref pPointer, ref pStrings, ref pSymbols);
                     result.type = ExecutedResultType.SUCCESS;
                     mBuzy[pID] = true; mWaitingID = pID;
@@ -558,6 +559,7 @@ public class Interpreter : MonoBehaviour {
                     result.type = ExecutedResultType.REQUIRE_NEXT;
                     break;
                 case 11:
+                    DialogueController.Instance.EndDialogue();
                     ExecuteMove(ref pProgram, ref pPointer, ref pStrings, ref pSymbols);
                     result.type = ExecutedResultType.SUCCESS;
                     break;
@@ -628,20 +630,23 @@ public class Interpreter : MonoBehaviour {
         DialogueController.Instance.OnSelecting.AddListener(OnSelecting);
     }
 
+    private void UndoBuzy() {
+        mWatingController = null;
+        mWaitingType = WaitingType.NONE;
+        mBuzy[mWaitingID] = false;
+        DialogueController.Instance.StartDialogue();
+    }
+
     private void Update() {
         if (mWaitingType != WaitingType.NONE) {
             if (mWaitingType == WaitingType.ANIMATION) {
                 if (mWatingController.HasAnimationEnded()) {
-                    mWatingController = null;
-                    mWaitingType = WaitingType.NONE;
-                    mBuzy[mWaitingID] = false;
+                    UndoBuzy();
                 }
             }
             else {
                 if (mWatingController.HasMovementEnded()) {
-                    mWatingController = null;
-                    mWaitingType = WaitingType.NONE;
-                    mBuzy[mWaitingID] = false;
+                    UndoBuzy();
                 }
             }
         }
