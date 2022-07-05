@@ -41,6 +41,10 @@ public class Interpreter : MonoBehaviour {
         public List<int> startPosition;
     }
 
+    private enum WaitingType { 
+        NONE, ANIMATION, MOVE
+    }
+
     private static Interpreter sInstance;
 
     private Dictionary<int, int> mCommandSize = new Dictionary<int, int>();
@@ -48,6 +52,10 @@ public class Interpreter : MonoBehaviour {
     private OptionsData mOptionsData = new OptionsData();
     private int mPreviousType = -1;
     private int mSelectedPos = -1;
+    private bool mGlobalBuzy = false;
+    private WaitingType mWaitingType = WaitingType.NONE;
+    private CharacterController mWatingController = null;
+    private int mWaitingID = -1;
 
     private void Awake() {
         sInstance = this;
@@ -355,6 +363,8 @@ public class Interpreter : MonoBehaviour {
             return;
         }
 
+        mWaitingType = WaitingType.ANIMATION;
+        mWatingController = cc;
         string anime = GetString(ref pProgram, ref pPointer, ref pStrings, ref pStrings);
         cc.PlayAnimation(anime);
     }
@@ -370,6 +380,8 @@ public class Interpreter : MonoBehaviour {
             return;
         }
 
+        mWaitingType = WaitingType.MOVE;
+        mWatingController = cc;
         Vector2 dis = new Vector2(GetFloat(ref pProgram, ref pPointer, ref pStrings, ref pSymbols),
             GetFloat(ref pProgram, ref pPointer, ref pStrings, ref pSymbols));
         float time = GetFloat(ref pProgram, ref pPointer, ref pStrings, ref pSymbols);
@@ -470,7 +482,7 @@ public class Interpreter : MonoBehaviour {
         ExecutedResult result = new ExecutedResult();
         int op = ReadInt(ref pProgram, ref pPointer);
 
-        if (mBuzy[pID]) {
+        if (mBuzy[pID] || mGlobalBuzy) {
             result.type = ExecutedResultType.NOT_APPLIED;
             return result;
         }
@@ -497,6 +509,8 @@ public class Interpreter : MonoBehaviour {
                     result.type = ExecutedResultType.REQUIRE_NEXT;
                     break;
                 case 1:
+                    DialogueController.Instance.StartDialogue();
+                    mGlobalBuzy = true;
                     result.type = ExecutedResultType.REQUIRE_NEXT;
                     break;
                 case 2:
@@ -537,7 +551,7 @@ public class Interpreter : MonoBehaviour {
                 case 9:
                     ExecuteAnimation(ref pProgram, ref pPointer, ref pStrings, ref pSymbols);
                     result.type = ExecutedResultType.SUCCESS;
-                    mBuzy[pID] = true;
+                    mBuzy[pID] = true; mWaitingID = pID;
                     break;
                 case 10:
                     ExecuteSound(ref pProgram, ref pPointer, ref pStrings, ref pSymbols);
@@ -570,7 +584,7 @@ public class Interpreter : MonoBehaviour {
                     result.type = ExecutedResultType.REQUIRE_NEXT;
                     break;
                 case 27:
-                    mBuzy[pID] = true;
+                    mBuzy[pID] = true; mWaitingID = pID;
                     float time = GetFloat(ref pProgram, ref pPointer, ref pStrings, ref pSymbols);
                     StartCoroutine(DelayDialogue(pID, time));
                     result.type = ExecutedResultType.SUCCESS;
@@ -588,6 +602,7 @@ public class Interpreter : MonoBehaviour {
                     result.code = ReadInt(ref pProgram, ref pPointer);
                     break;
                 case 255:
+                    mGlobalBuzy = false;
                     DialogueController.Instance.EndDialogue();
                     result.type = ExecutedResultType.END;
                     break;
@@ -611,5 +626,24 @@ public class Interpreter : MonoBehaviour {
 
     private void Start() {
         DialogueController.Instance.OnSelecting.AddListener(OnSelecting);
+    }
+
+    private void Update() {
+        if (mWaitingType != WaitingType.NONE) {
+            if (mWaitingType == WaitingType.ANIMATION) {
+                if (mWatingController.HasAnimationEnded()) {
+                    mWatingController = null;
+                    mWaitingType = WaitingType.NONE;
+                    mBuzy[mWaitingID] = false;
+                }
+            }
+            else {
+                if (mWatingController.HasMovementEnded()) {
+                    mWatingController = null;
+                    mWaitingType = WaitingType.NONE;
+                    mBuzy[mWaitingID] = false;
+                }
+            }
+        }
     }
 }
