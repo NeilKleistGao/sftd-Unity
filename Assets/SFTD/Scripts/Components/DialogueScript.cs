@@ -50,7 +50,7 @@ public class DialogueScript : MonoBehaviour {
         StringDatabase.Instance.LoadI18NFile(i18n);
     }
 
-    private bool TryToStart(ref Dictionary<int, DialogueData> pList) {
+    private bool TryToStart(ref Dictionary<int, DialogueData> pList, bool pAuto = false) {
         var interpreter = Interpreter.Instance;
         bool found = false;
         foreach (var it in pList) {
@@ -59,7 +59,7 @@ public class DialogueScript : MonoBehaviour {
             mPointer = 0;
 
             do {
-                var res = interpreter.Execute(GetHashCode(), ref mPointer, ref dialogue.commands, ref mIL.strings, ref mIL.symbols);
+                var res = interpreter.Execute(GetHashCode(), ref mPointer, ref dialogue.commands, ref mIL.strings, ref mIL.symbols, pAuto);
 
                 switch (res.type) {
                     case ExecutedResultType.SUCCESS:
@@ -92,7 +92,7 @@ public class DialogueScript : MonoBehaviour {
             if (found) {
                 mCurrentDialogue = dialogue;
                 DialogueController.Instance.StartDialogue();
-                StartCoroutine("Process");
+                StartCoroutine(Process(pAuto));
                 break;
             }
         }
@@ -109,7 +109,7 @@ public class DialogueScript : MonoBehaviour {
 
         bool _ = (mInteracting && TryToStart(ref mIL.interactDialogues)) ||
             (mTriggered && TryToStart(ref mIL.triggerDialogues)) ||
-            TryToStart(ref mIL.autoDialogues);
+            TryToStart(ref mIL.autoDialogues, true);
     }
 
     private void OnTriggerEnter2D(Collider2D collision) {
@@ -120,12 +120,12 @@ public class DialogueScript : MonoBehaviour {
         mTriggered = false;
     }
 
-    private IEnumerator Process() {
+    private IEnumerator Process(bool pAuto) {
         var interpreter = Interpreter.Instance;
         bool end = false;
 
         do {
-            var res = interpreter.Execute(GetHashCode(), ref mPointer, ref mCurrentDialogue.commands, ref mIL.strings, ref mIL.symbols);
+            var res = interpreter.Execute(GetHashCode(), ref mPointer, ref mCurrentDialogue.commands, ref mIL.strings, ref mIL.symbols, pAuto);
 
             switch (res.type) {
                 case ExecutedResultType.SUCCESS:

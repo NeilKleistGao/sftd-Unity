@@ -478,11 +478,11 @@ public class Interpreter : MonoBehaviour {
         }
     }
 
-    public ExecutedResult Execute(int pID, ref int pPointer, ref byte[] pProgram, ref string[] pStrings, ref string[] pSymbols) {
+    public ExecutedResult Execute(int pID, ref int pPointer, ref byte[] pProgram, ref string[] pStrings, ref string[] pSymbols, bool pAuto) {
         ExecutedResult result = new ExecutedResult();
         int op = ReadInt(ref pProgram, ref pPointer);
 
-        if (mBuzy[pID] || mGlobalBuzy) {
+        if (mBuzy[pID] || (mGlobalBuzy && !pAuto)) {
             result.type = ExecutedResultType.NOT_APPLIED;
             return result;
         }
