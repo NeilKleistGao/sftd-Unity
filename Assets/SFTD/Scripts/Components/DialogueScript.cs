@@ -91,7 +91,6 @@ public class DialogueScript : MonoBehaviour {
 
             if (found) {
                 mCurrentDialogue = dialogue;
-                DialogueController.Instance.StartDialogue();
                 StartCoroutine(Process(pAuto));
                 break;
             }
