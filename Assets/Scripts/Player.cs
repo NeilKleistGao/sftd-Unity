@@ -5,8 +5,8 @@ using UnityEngine;
 public class Player : MonoBehaviour {
     private readonly float mVelocity = 5.0f;
 
-    private void Update() {
-        float dx = Time.deltaTime * mVelocity;
+    private void FixedUpdate() {
+        float dx = Time.fixedDeltaTime * mVelocity;
         if (Mathf.Abs(Input.GetAxis("MoveUp")) >= 0.1f) {
             transform.position = new Vector3(transform.position.x, transform.position.y + dx, transform.position.z);
         }

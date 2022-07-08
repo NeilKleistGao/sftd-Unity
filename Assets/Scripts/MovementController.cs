@@ -11,9 +11,9 @@ public class MovementController : MonoBehaviour {
         mPrevious = transform.position;
     }
 
-    private void Update() {
+    private void FixedUpdate() {
         Vector2 now = transform.position;
-        var d = (now - mPrevious) / Time.deltaTime;
+        var d = (now - mPrevious) / Time.fixedDeltaTime;
         if (d.magnitude < 0.001f) {
             SetVelocity(mForward, false);
         }
