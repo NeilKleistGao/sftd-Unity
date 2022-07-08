@@ -216,8 +216,4 @@ public class DialogueController : MonoBehaviour {
             effectPlayer.PlayOneShot(clip);
         }
     }
-
-    public bool IsSoundEffectEnd() {
-        return !effectPlayer.isPlaying;
-    }
 }
