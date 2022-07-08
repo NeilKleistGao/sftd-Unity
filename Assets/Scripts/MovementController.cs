@@ -5,7 +5,7 @@ using UnityEngine;
 public class MovementController : MonoBehaviour {
     [SerializeField] private Animator animator;
     private Vector2 mPrevious = Vector2.zero;
-    private Vector2 mForward = Vector2.down;
+    private Vector2 mForward = Vector2.down / 10.0f;
 
     private void Start() {
         mPrevious = transform.position;
