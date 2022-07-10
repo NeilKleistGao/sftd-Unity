@@ -482,6 +482,10 @@ public class Interpreter : MonoBehaviour {
         ExecutedResult result = new ExecutedResult();
         int op = ReadInt(ref pProgram, ref pPointer);
 
+        if (!mBuzy.ContainsKey(pID)) {
+            mBuzy[pID] = false;
+        }
+
         if (mBuzy[pID] || (mGlobalBuzy && !pAuto)) {
             result.type = ExecutedResultType.NOT_APPLIED;
             return result;
