@@ -898,6 +898,62 @@ PrefabInstance:
       propertyPath: moveDownKey
       value: MoveDown
       objectReference: {fileID: 0}
+    - target: {fileID: 690482004195494001, guid: 5f6be9a026bdf6a4987dda3bac496c73, type: 3}
+      propertyPath: endEvent.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 690482004195494001, guid: 5f6be9a026bdf6a4987dda3bac496c73, type: 3}
+      propertyPath: beginEvnet.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 690482004195494001, guid: 5f6be9a026bdf6a4987dda3bac496c73, type: 3}
+      propertyPath: endEvent.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 690482004195494001, guid: 5f6be9a026bdf6a4987dda3bac496c73, type: 3}
+      propertyPath: beginEvnet.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 690482004195494001, guid: 5f6be9a026bdf6a4987dda3bac496c73, type: 3}
+      propertyPath: endEvent.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1414919239}
+    - target: {fileID: 690482004195494001, guid: 5f6be9a026bdf6a4987dda3bac496c73, type: 3}
+      propertyPath: beginEvnet.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1414919239}
+    - target: {fileID: 690482004195494001, guid: 5f6be9a026bdf6a4987dda3bac496c73, type: 3}
+      propertyPath: endEvent.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 690482004195494001, guid: 5f6be9a026bdf6a4987dda3bac496c73, type: 3}
+      propertyPath: endEvent.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: ResetBuzy
+      objectReference: {fileID: 0}
+    - target: {fileID: 690482004195494001, guid: 5f6be9a026bdf6a4987dda3bac496c73, type: 3}
+      propertyPath: beginEvnet.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 690482004195494001, guid: 5f6be9a026bdf6a4987dda3bac496c73, type: 3}
+      propertyPath: beginEvnet.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: Occupy
+      objectReference: {fileID: 0}
+    - target: {fileID: 690482004195494001, guid: 5f6be9a026bdf6a4987dda3bac496c73, type: 3}
+      propertyPath: endEvent.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: Player, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 690482004195494001, guid: 5f6be9a026bdf6a4987dda3bac496c73, type: 3}
+      propertyPath: beginEvnet.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: Player, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 690482004195494001, guid: 5f6be9a026bdf6a4987dda3bac496c73, type: 3}
+      propertyPath: endEvent.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 690482004195494001, guid: 5f6be9a026bdf6a4987dda3bac496c73, type: 3}
+      propertyPath: beginEvnet.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     - target: {fileID: 690482004195494002, guid: 5f6be9a026bdf6a4987dda3bac496c73, type: 3}
       propertyPath: m_RootOrder
       value: 1
