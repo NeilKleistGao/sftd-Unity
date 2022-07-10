@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class MovementController : MonoBehaviour {
     [SerializeField] private Animator animator;
+    [SerializeField] private bool isUserControlling = false;
+
     private Vector2 mPrevious = Vector2.zero;
     private Vector2 mForward = Vector2.down / 10.0f;
 
@@ -12,6 +14,10 @@ public class MovementController : MonoBehaviour {
     }
 
     private void FixedUpdate() {
+        if (isUserControlling) {
+            return;
+        }
+
         Vector2 now = transform.position;
         var d = (now - mPrevious) / Time.fixedDeltaTime;
         if (d.magnitude < 0.001f) {
@@ -31,5 +37,9 @@ public class MovementController : MonoBehaviour {
        
         animator.SetFloat("BlendX", pV.x);
         animator.SetFloat("BlendY", pV.y);
+    }
+
+    public void SetVelocity(Vector2 pV) {
+        SetVelocity(pV, true);
     }
 }
