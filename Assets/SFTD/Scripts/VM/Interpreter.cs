@@ -518,12 +518,14 @@ public class Interpreter : MonoBehaviour {
                     break;
                 case 2:
                 case 3: {
-                        string name = ReadString(ref pProgram, ref pPointer);
+                        int id = ReadInt(ref pProgram, ref pPointer);
+                        string name = pSymbols[id];
                         if (op == 2) {
                             DialogueController.Instance.SetAvatar(name);
                         }
                         else {
-                            string state = ReadString(ref pProgram, ref pPointer);
+                            int id2 = ReadInt(ref pProgram, ref pPointer);
+                            string state = pSymbols[id2];
                             DialogueController.Instance.SetAvatar(name, state);
                         }
                         
