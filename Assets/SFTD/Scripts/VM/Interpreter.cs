@@ -515,7 +515,7 @@ public class Interpreter : MonoBehaviour {
                 case 1:
                     DialogueController.Instance.StartDialogue();
                     mGlobalBusy = true;
-                    result.type = ExecutedResultType.REQUIRE_NEXT;
+                    result.type = ExecutedResultType.SUCCESS;
                     break;
                 case 2:
                 case 3: {

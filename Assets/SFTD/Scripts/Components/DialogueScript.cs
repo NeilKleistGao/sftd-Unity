@@ -122,61 +122,66 @@ public class DialogueScript : MonoBehaviour {
 
     private IEnumerator Process(bool pAuto) {
         var interpreter = Interpreter.Instance;
-        bool end = false;
+        while (true) {
+            bool end = false;
 
-        do {
-            var res = interpreter.Execute(GetHashCode(), ref mPointer, ref mCurrentDialogue.commands, ref mIL.strings, ref mIL.symbols, pAuto);
+            do {
+                var res = interpreter.Execute(GetHashCode(), ref mPointer, ref mCurrentDialogue.commands, ref mIL.strings, ref mIL.symbols, pAuto);
 
-            switch (res.type) {
-                case ExecutedResultType.SUCCESS:
-                    end = true;
-                    break;
-                case ExecutedResultType.CALL: {
-                        StackValue stackValue = new StackValue();
-                        stackValue.pointer = mPointer + 1;
-                        stackValue.data = mCurrentDialogue;
-                        mStack.Push(stackValue);
-                        mPointer = 0;
-                        mCurrentDialogue = mIL.defaultDialogues[res.code];
+                switch (res.type) {
+                    case ExecutedResultType.SUCCESS:
+                        end = true;
                         break;
-                    }
-                case ExecutedResultType.GOTO: {
-                        mPointer = 0;
-                        mCurrentDialogue = mIL.defaultDialogues[res.code];
-                        break;
-                    }
-                case ExecutedResultType.FAILED:
-                    mPointer = -1;
-                    Debug.LogError("Runtime Error!");
-                    end = true;
-                    break;
-                case ExecutedResultType.NOT_APPLIED:
-                    end = true;
-                    break;
-                case ExecutedResultType.JUMP:
-                    mPointer = res.code;
-                    break;
-                case ExecutedResultType.REQUIRE_NEXT:
-                    break;
-                case ExecutedResultType.END: {
-                        if (mStack.Count > 0) {
-                            var top = mStack.Pop();
-                            mPointer = top.pointer;
-                            mCurrentDialogue = top.data;
+                    case ExecutedResultType.CALL: {
+                            StackValue stackValue = new StackValue();
+                            stackValue.pointer = mPointer + 1;
+                            stackValue.data = mCurrentDialogue;
+                            mStack.Push(stackValue);
+                            mPointer = 0;
+                            mCurrentDialogue = mIL.defaultDialogues[res.code];
+                            break;
                         }
-                        else {
-                            mPointer = -1;
-                            end = true;
+                    case ExecutedResultType.GOTO: {
+                            mPointer = 0;
+                            mCurrentDialogue = mIL.defaultDialogues[res.code];
+                            break;
+                        }
+                    case ExecutedResultType.FAILED:
+                        mPointer = -1;
+                        Debug.LogError("Runtime Error!");
+                        end = true;
+                        break;
+                    case ExecutedResultType.NOT_APPLIED:
+                        end = true;
+                        break;
+                    case ExecutedResultType.JUMP:
+                        mPointer = res.code;
+                        break;
+                    case ExecutedResultType.REQUIRE_NEXT:
+                        break;
+                    case ExecutedResultType.END: {
+                            if (mStack.Count > 0) {
+                                var top = mStack.Pop();
+                                mPointer = top.pointer;
+                                mCurrentDialogue = top.data;
+                            }
+                            else {
+                                mPointer = -1;
+                                end = true;
+                            }
+
+                            break;
                         }
 
-                        break;
-                    }
-                    
+                }
+            } while (!end);
+
+            if (mPointer > -1) {
+                yield return null;
             }
-        } while (!end);
-
-        if (mPointer > -1) {
-            yield return null;
+            else {
+                break;
+            }
         }
     }
 
