@@ -48,11 +48,11 @@ public class Interpreter : MonoBehaviour {
     private static Interpreter sInstance;
 
     private Dictionary<int, int> mCommandSize = new Dictionary<int, int>();
-    private Dictionary<int, bool> mBuzy = new Dictionary<int, bool>();
+    private Dictionary<int, bool> mBusy = new Dictionary<int, bool>();
     private OptionsData mOptionsData = new OptionsData();
     private int mPreviousType = -1;
     private int mSelectedPos = -1;
-    private bool mGlobalBuzy = false;
+    private bool mGlobalBusy = false;
     private WaitingType mWaitingType = WaitingType.NONE;
     private CharacterController mWatingController = null;
     private int mWaitingID = -1;
@@ -450,7 +450,7 @@ public class Interpreter : MonoBehaviour {
 
     private IEnumerator DelayDialogue(int pID, float pTime) {
         yield return new WaitForSeconds(pTime);
-        mBuzy[pID] = false;
+        mBusy[pID] = false;
     }
 
     private void ExecutePublish(ref byte[] pProgram, ref int pPointer, ref string[] pStrings, ref string[] pSymbols) { 
@@ -482,11 +482,11 @@ public class Interpreter : MonoBehaviour {
         ExecutedResult result = new ExecutedResult();
         int op = ReadInt(ref pProgram, ref pPointer);
 
-        if (!mBuzy.ContainsKey(pID)) {
-            mBuzy[pID] = false;
+        if (!mBusy.ContainsKey(pID)) {
+            mBusy[pID] = false;
         }
 
-        if (mBuzy[pID] || (mGlobalBuzy && !pAuto)) {
+        if (mBusy[pID] || (mGlobalBusy && !pAuto)) {
             result.type = ExecutedResultType.NOT_APPLIED;
             return result;
         }
@@ -495,10 +495,10 @@ public class Interpreter : MonoBehaviour {
             if (mSelectedPos == -1) {
                 DialogueController.Instance.ShowOptions(mOptionsData.options.ToArray());
                 result.type = ExecutedResultType.NOT_APPLIED;
-                mBuzy[pID] = true;
+                mBusy[pID] = true;
             }
             else {
-                mBuzy[pID] = false;
+                mBusy[pID] = false;
                 result.type = ExecutedResultType.JUMP;
                 result.code = mSelectedPos;
                 mSelectedPos = -1;
@@ -514,7 +514,7 @@ public class Interpreter : MonoBehaviour {
                     break;
                 case 1:
                     DialogueController.Instance.StartDialogue();
-                    mGlobalBuzy = true;
+                    mGlobalBusy = true;
                     result.type = ExecutedResultType.REQUIRE_NEXT;
                     break;
                 case 2:
@@ -556,7 +556,7 @@ public class Interpreter : MonoBehaviour {
                     DialogueController.Instance.EndDialogue();
                     ExecuteAnimation(ref pProgram, ref pPointer, ref pStrings, ref pSymbols);
                     result.type = ExecutedResultType.SUCCESS;
-                    mBuzy[pID] = true; mWaitingID = pID;
+                    mBusy[pID] = true; mWaitingID = pID;
                     break;
                 case 10:
                     ExecuteSound(ref pProgram, ref pPointer, ref pStrings, ref pSymbols);
@@ -590,7 +590,7 @@ public class Interpreter : MonoBehaviour {
                     result.type = ExecutedResultType.REQUIRE_NEXT;
                     break;
                 case 27:
-                    mBuzy[pID] = true; mWaitingID = pID;
+                    mBusy[pID] = true; mWaitingID = pID;
                     float time = GetFloat(ref pProgram, ref pPointer, ref pStrings, ref pSymbols);
                     StartCoroutine(DelayDialogue(pID, time));
                     result.type = ExecutedResultType.SUCCESS;
@@ -608,7 +608,7 @@ public class Interpreter : MonoBehaviour {
                     result.code = ReadInt(ref pProgram, ref pPointer);
                     break;
                 case 255:
-                    mGlobalBuzy = false;
+                    mGlobalBusy = false;
                     DialogueController.Instance.EndDialogue();
                     result.type = ExecutedResultType.END;
                     break;
@@ -634,10 +634,10 @@ public class Interpreter : MonoBehaviour {
         DialogueController.Instance.OnSelecting.AddListener(OnSelecting);
     }
 
-    private void UndoBuzy() {
+    private void UndoBusy() {
         mWatingController = null;
         mWaitingType = WaitingType.NONE;
-        mBuzy[mWaitingID] = false;
+        mBusy[mWaitingID] = false;
         DialogueController.Instance.StartDialogue();
     }
 
@@ -645,12 +645,12 @@ public class Interpreter : MonoBehaviour {
         if (mWaitingType != WaitingType.NONE) {
             if (mWaitingType == WaitingType.ANIMATION) {
                 if (mWatingController.HasAnimationEnded()) {
-                    UndoBuzy();
+                    UndoBusy();
                 }
             }
             else {
                 if (mWatingController.HasMovementEnded()) {
-                    UndoBuzy();
+                    UndoBusy();
                 }
             }
         }

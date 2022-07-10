@@ -6,10 +6,10 @@ public class Player : MonoBehaviour {
     [SerializeField] private MovementController movementController;
     private readonly float mVelocity = 5.0f;
     private Vector2 mForward = Vector2.down / 10;
-    private bool mBuzy = false;
+    private bool mBusy = false;
 
     private void FixedUpdate() {
-        if (mBuzy) {
+        if (mBusy) {
             return;
         }
 
@@ -36,10 +36,10 @@ public class Player : MonoBehaviour {
     }
 
     public void Occupy() {
-        mBuzy = true;
+        mBusy = true;
     }
 
-    public void ResetBuzy() {
-        mBuzy = false;
+    public void ResetBusy() {
+        mBusy = false;
     }
 }
