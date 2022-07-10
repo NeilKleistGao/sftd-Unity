@@ -63,7 +63,6 @@ public class DialogueScript : MonoBehaviour {
 
                 switch (res.type) {
                     case ExecutedResultType.SUCCESS:
-                        ++mPointer;
                         found = end = true;
                         break;
                     case ExecutedResultType.CALL:
@@ -81,7 +80,6 @@ public class DialogueScript : MonoBehaviour {
                         mPointer = res.code;
                         break;
                     case ExecutedResultType.REQUIRE_NEXT:
-                        ++mPointer;
                         break;
                     case ExecutedResultType.END:
                         end = true;
@@ -131,7 +129,7 @@ public class DialogueScript : MonoBehaviour {
 
             switch (res.type) {
                 case ExecutedResultType.SUCCESS:
-                    ++mPointer; end = true;
+                    end = true;
                     break;
                 case ExecutedResultType.CALL: {
                         StackValue stackValue = new StackValue();
@@ -159,7 +157,6 @@ public class DialogueScript : MonoBehaviour {
                     mPointer = res.code;
                     break;
                 case ExecutedResultType.REQUIRE_NEXT:
-                    ++mPointer;
                     break;
                 case ExecutedResultType.END: {
                         if (mStack.Count > 0) {
