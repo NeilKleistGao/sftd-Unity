@@ -95,7 +95,7 @@ public class DialogueController : MonoBehaviour {
 
             if (info != null) {
                 avatarImage.sprite = info.avatar;
-                nameText.text = name;
+                nameText.text = pName;
 
                 if (info.font == null) {
                     mainContentText.font = defaultFont;
