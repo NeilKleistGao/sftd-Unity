@@ -105,6 +105,9 @@ public class DialogueScript : MonoBehaviour {
         }
 
         mInteracting = Mathf.Abs(Input.GetAxis(interactKey)) > 0.01f;
+        if (mInteracting) {
+            Input.ResetInputAxes();
+        }
 
         bool _ = (mInteracting && TryToStart(ref mIL.interactDialogues)) ||
             (mTriggered && TryToStart(ref mIL.triggerDialogues)) ||
