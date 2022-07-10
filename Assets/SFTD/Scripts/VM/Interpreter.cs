@@ -52,7 +52,7 @@ public class Interpreter : MonoBehaviour {
     private OptionsData mOptionsData = new OptionsData();
     private int mPreviousType = -1;
     private int mSelectedPos = -1;
-    private bool mGlobalBusy = false;
+    private int mGlobalBusy = -1;
     private WaitingType mWaitingType = WaitingType.NONE;
     private CharacterController mWatingController = null;
     private int mWaitingID = -1;
@@ -486,7 +486,7 @@ public class Interpreter : MonoBehaviour {
             mBusy[pID] = false;
         }
 
-        if (mBusy[pID] || (mGlobalBusy && !pAuto)) {
+        if (!pAuto && ((mGlobalBusy != pID && mGlobalBusy != -1) || mBusy[pID])) {
             result.type = ExecutedResultType.NOT_APPLIED;
             return result;
         }
@@ -514,7 +514,6 @@ public class Interpreter : MonoBehaviour {
                     break;
                 case 1:
                     DialogueController.Instance.StartDialogue();
-                    mGlobalBusy = true;
                     result.type = ExecutedResultType.SUCCESS;
                     break;
                 case 2:
@@ -608,7 +607,7 @@ public class Interpreter : MonoBehaviour {
                     result.code = ReadInt(ref pProgram, ref pPointer);
                     break;
                 case 255:
-                    mGlobalBusy = false;
+                    mGlobalBusy = -1;
                     DialogueController.Instance.EndDialogue();
                     result.type = ExecutedResultType.END;
                     break;

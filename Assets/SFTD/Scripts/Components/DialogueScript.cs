@@ -186,6 +186,6 @@ public class DialogueScript : MonoBehaviour {
     }
 
     public override int GetHashCode() {
-        return script.GetHashCode();
+        return Mathf.Abs(script.GetHashCode());
     }
 }
