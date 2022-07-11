@@ -1015,6 +1015,18 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 411231912790296380, guid: 8342d21e6ad05ad4191895aeebed8588, type: 3}
+      propertyPath: effects.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 411231912790296380, guid: 8342d21e6ad05ad4191895aeebed8588, type: 3}
+      propertyPath: effects.Array.data[0].clip
+      value: 
+      objectReference: {fileID: 8300000, guid: 07497fa923fc9164e9d1f827a156f8e1, type: 3}
+    - target: {fileID: 411231912790296380, guid: 8342d21e6ad05ad4191895aeebed8588, type: 3}
+      propertyPath: effects.Array.data[0].name
+      value: hint
+      objectReference: {fileID: 0}
     - target: {fileID: 1019056104804723439, guid: 8342d21e6ad05ad4191895aeebed8588, type: 3}
       propertyPath: characters.Array.size
       value: 2
