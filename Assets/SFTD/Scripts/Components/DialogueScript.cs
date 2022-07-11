@@ -134,7 +134,7 @@ public class DialogueScript : MonoBehaviour {
                         break;
                     case ExecutedResultType.CALL: {
                             StackValue stackValue = new StackValue();
-                            stackValue.pointer = mPointer + 1;
+                            stackValue.pointer = mPointer;
                             stackValue.data = mCurrentDialogue;
                             mStack.Push(stackValue);
                             mPointer = 0;

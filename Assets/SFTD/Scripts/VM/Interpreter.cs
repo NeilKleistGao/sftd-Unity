@@ -498,12 +498,13 @@ public class Interpreter : MonoBehaviour {
                 DialogueController.Instance.ShowOptions(mOptionsData.options.ToArray());
                 result.type = ExecutedResultType.NOT_APPLIED;
                 mBusy[pID] = true;
+                mGlobalBusy = pID;
             }
             else {
-                mBusy[pID] = false;
                 result.type = ExecutedResultType.JUMP;
                 result.code = mSelectedPos;
                 mSelectedPos = -1;
+                mPreviousType = -1;
             }
 
             return result;
@@ -638,6 +639,8 @@ public class Interpreter : MonoBehaviour {
 
     private void OnSelecting(int pIndex) {
         mSelectedPos = mOptionsData.startPosition[pIndex];
+        mBusy[mGlobalBusy] = false;
+        mGlobalBusy = -1;
     }
 
     private void Start() {
