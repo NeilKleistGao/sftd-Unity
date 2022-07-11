@@ -133,12 +133,15 @@ public class DialogueController : MonoBehaviour {
         return time;
     }
 
-    public void Skip() {
+    public bool Skip() {
         if (mTextCoroutine != null) {
             mainContentText.maxVisibleCharacters = mainContentText.text.Length;
             StopCoroutine(mTextCoroutine);
             mTextCoroutine = null;
+            return false;
         }
+
+        return true;
     }
 
     private IEnumerator TypeCharacter() {
@@ -150,6 +153,8 @@ public class DialogueController : MonoBehaviour {
             ++mainContentText.maxVisibleCharacters;
             yield return new WaitForSeconds(1.0f / mSpeed);
         }
+
+        mTextCoroutine = null;
     }
 
     public void ShowOptions(string[] pOptions) {
@@ -186,6 +191,7 @@ public class DialogueController : MonoBehaviour {
                 Input.ResetInputAxes();
             }
             else if (Mathf.Abs(Input.GetAxis(submitKey)) >= 0.1f) {
+                Input.ResetInputAxes();
                 break;
             }
 

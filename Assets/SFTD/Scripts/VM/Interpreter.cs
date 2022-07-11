@@ -56,6 +56,7 @@ public class Interpreter : MonoBehaviour {
     private WaitingType mWaitingType = WaitingType.NONE;
     private CharacterController mWatingController = null;
     private int mWaitingID = -1;
+    [SerializeField] private KeyCode nextKey;
 
     private void Awake() {
         sInstance = this;
@@ -536,6 +537,8 @@ public class Interpreter : MonoBehaviour {
                 case 4:
                 case 5: {
                         ExecuteSpeak(op, ref pProgram, ref pPointer, ref pStrings, ref pSymbols);
+                        mBusy[pID] = true;
+                        mGlobalBusy = pID;
                         result.type = ExecutedResultType.SUCCESS;
                         break;
                     }
@@ -653,6 +656,16 @@ public class Interpreter : MonoBehaviour {
             else {
                 if (mWatingController.HasMovementEnded()) {
                     UndoBusy();
+                }
+            }
+        }
+
+        if (mGlobalBusy != -1 && (mPreviousType == 4 || mPreviousType == 5)) {
+            if (Input.GetKeyUp(nextKey)) {
+                var next = DialogueController.Instance.Skip();
+                if (next) {
+                    mBusy[mGlobalBusy] = false;
+                    mGlobalBusy = -1;
                 }
             }
         }

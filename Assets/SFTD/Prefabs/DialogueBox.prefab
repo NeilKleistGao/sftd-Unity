@@ -493,7 +493,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: New Text
+  m_text: 
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -646,7 +646,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0fb43cfc6d3ff594e8373b0be73c62d3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  defaultSpeed: 1
+  defaultSpeed: 10
   dialogueCanvas: {fileID: 690482002435554653}
   avatarImage: {fileID: 690482003046764656}
   nameText: {fileID: 690482003298820175}
@@ -656,6 +656,15 @@ MonoBehaviour:
   defaultEffect: {fileID: 0}
   optionPrefab: {fileID: 918630638989410033, guid: 04ea115f1ce511d4ca26afad1d6a3617, type: 3}
   optionsParent: {fileID: 1124250577735716595}
+  moveUpKey: 
+  moveDownKey: 
+  submitKey: 
+  beginEvnet:
+    m_PersistentCalls:
+      m_Calls: []
+  endEvent:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &690482004329981354
 GameObject:
   m_ObjectHideFlags: 0

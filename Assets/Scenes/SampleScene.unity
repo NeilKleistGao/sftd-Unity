@@ -1047,6 +1047,10 @@ PrefabInstance:
       propertyPath: controllers.Array.data[0]
       value: 
       objectReference: {fileID: 884523562}
+    - target: {fileID: 3371195054106562217, guid: 8342d21e6ad05ad4191895aeebed8588, type: 3}
+      propertyPath: nextKey
+      value: 13
+      objectReference: {fileID: 0}
     - target: {fileID: 3371195054106562218, guid: 8342d21e6ad05ad4191895aeebed8588, type: 3}
       propertyPath: m_RootOrder
       value: 2
