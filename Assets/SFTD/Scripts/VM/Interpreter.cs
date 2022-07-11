@@ -554,7 +554,12 @@ public class Interpreter : MonoBehaviour {
                     result.type = ExecutedResultType.JUMP;
                     string s = pStrings[ReadInt(ref pProgram, ref pPointer)];
                     result.code = ReadInt(ref pProgram, ref pPointer);
-                    mOptionsData.options.Add(s);
+                    if (mOptionsData.options == null) {
+                        mOptionsData.options = new List<string>();
+                        mOptionsData.startPosition = new List<int>();
+                    }
+
+                    mOptionsData.options.Add(StringDatabase.Instance.GetString(s));
                     mOptionsData.startPosition.Add(pPointer);
                     break;
                 case 9:
