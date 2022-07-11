@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: You
   m_EditorClassIdentifier: 
   name: you
-  defaultInfo: {fileID: 0}
+  defaultInfo: {fileID: 11400000, guid: 9a00b593268346e48a5317427717793d, type: 2}
   states: []
