@@ -488,6 +488,7 @@ public class Interpreter : MonoBehaviour {
 
         if (!pAuto && ((mGlobalBusy != pID && mGlobalBusy != -1) || mBusy[pID])) {
             result.type = ExecutedResultType.NOT_APPLIED;
+            pPointer -= 4;
             return result;
         }
 
