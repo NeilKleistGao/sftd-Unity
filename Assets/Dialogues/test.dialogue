@@ -27,7 +27,7 @@ dialogue beginner {
         "WOW!"
         "A new user!"
         move @NPC (2, 0) in 0.5
-        move @NPC (0, -0.5) in 0.1
+        move @NPC (0, -1) in 0.1
         move @NPC (-2, 0) in 0.5
         "Let me show you something around here!"
     }
@@ -35,6 +35,10 @@ dialogue beginner {
     if ($show_anime) {
         animate @NPC "Smile"
     }
+
+    move @NPC (2, 0) in 0.5
+    move @NPC (0, 1) in 0.1
+    move @NPC (-2, 0) in 0.5
 }
 
 dialogue master {
