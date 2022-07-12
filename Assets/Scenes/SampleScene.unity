@@ -474,6 +474,7 @@ MonoBehaviour:
   script: {fileID: 4900000, guid: 207ce7c5e005bf245a949fd2562b8e8e, type: 3}
   i18n: {fileID: 4900000, guid: 978b89813003e594bb1ef5421ad6d591, type: 3}
   interactKey: Submit
+  playerTag: Player
 --- !u!114 &884523562
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -705,7 +706,7 @@ GameObject:
   - component: {fileID: 1414919240}
   m_Layer: 0
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

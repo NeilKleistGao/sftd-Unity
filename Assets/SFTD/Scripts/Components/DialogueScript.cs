@@ -7,6 +7,7 @@ public class DialogueScript : MonoBehaviour {
     [SerializeField] private TextAsset script;
     [SerializeField] private TextAsset i18n;
     [SerializeField] private string interactKey = "Submit";
+    [SerializeField] private string playerTag = "Player";
 
     private struct StackValue {
         public int pointer;
@@ -107,17 +108,21 @@ public class DialogueScript : MonoBehaviour {
             Input.ResetInputAxes();
         }
 
-        bool _ = (mInteracting && TryToStart(ref mIL.interactDialogues)) ||
+        bool _ = (mInteracting && mTriggered && TryToStart(ref mIL.interactDialogues)) ||
             (mTriggered && TryToStart(ref mIL.triggerDialogues)) ||
             TryToStart(ref mIL.autoDialogues, true);
     }
 
     private void OnTriggerEnter2D(Collider2D collision) {
-        mTriggered = true;
+        if (collision.gameObject.tag == playerTag) { 
+            mTriggered = true;
+        }
     }
 
     private void OnTriggerExit2D(Collider2D collision) {
-        mTriggered = false;
+        if (collision.gameObject.tag == playerTag) { 
+            mTriggered = false;
+        }
     }
 
     private IEnumerator Process(bool pAuto) {
