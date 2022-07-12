@@ -488,7 +488,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mName: NPC
-  animator: {fileID: 0}
+  animator: {fileID: 884523564}
 --- !u!212 &884523563
 SpriteRenderer:
   m_ObjectHideFlags: 0

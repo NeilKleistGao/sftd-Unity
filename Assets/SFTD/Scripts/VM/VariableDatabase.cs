@@ -122,11 +122,12 @@ public class VariableDatabase : MonoBehaviour {
     public float GetFloat(string pName) {
         if (mNameMapping.ContainsKey(pName)) {
             int i = mNameMapping[pName];
-            if (variables[i].type != VariableType.INT) {
+            if (variables[i].type == VariableType.INT) {
                 return variables[i].i;
             }
             if (variables[i].type != VariableType.FLOAT) {
                 Debug.LogWarningFormat("Variable {0} is not float.", pName);
+                return 0.0f;
             }
 
             return variables[i].f;
@@ -229,11 +230,12 @@ public class VariableDatabase : MonoBehaviour {
 
     public float GetFloat(int pIndex) {
         if (mTempVariables.ContainsKey(pIndex)) {
-            if (mTempVariables[pIndex].type != VariableType.INT) {
+            if (mTempVariables[pIndex].type == VariableType.INT) {
                 return mTempVariables[pIndex].i;
             }
             if (mTempVariables[pIndex].type != VariableType.FLOAT) {
                 Debug.LogWarningFormat("Variable {0} is not float.", pIndex);
+                return 0.0f;
             }
 
             return mTempVariables[pIndex].f;

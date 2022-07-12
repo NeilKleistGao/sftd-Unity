@@ -577,6 +577,7 @@ public class Interpreter : MonoBehaviour {
                     DialogueController.Instance.EndDialogue();
                     ExecuteMove(ref pProgram, ref pPointer, ref pStrings, ref pSymbols);
                     result.type = ExecutedResultType.SUCCESS;
+                    mBusy[pID] = true; mWaitingID = pID;
                     break;
                 case 12:
                     bool test = GetBool(ref pProgram, ref pPointer, ref pStrings, ref pSymbols);
