@@ -120,8 +120,8 @@ public class Interpreter : MonoBehaviour {
     }
 
     private float ReadFloat(ref byte[] pContent, ref int pPointer) {
-        byte[] buffer = new byte[4] { pContent[pPointer], pContent[pPointer + 1],
-                                        pContent[pPointer + 2], pContent[pPointer + 3]};
+        byte[] buffer = new byte[4] { pContent[pPointer + 3], pContent[pPointer + 2],
+                                        pContent[pPointer + 1], pContent[pPointer]};
         pPointer += 4;
         return BitConverter.ToSingle(buffer);
     }
